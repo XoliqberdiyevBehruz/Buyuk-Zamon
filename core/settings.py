@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ya$+9uo*mxuk5ochu10aqwsptudr27ob9dq#85r%oboj#jxobi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['buyuk.zamon.crm.repid.uz']
 
