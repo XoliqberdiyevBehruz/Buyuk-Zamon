@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-ya$+9uo*mxuk5ochu10aqwsptudr27ob9dq#85r%oboj#jxobi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['buyuk.zamon.crm.repid.uz']
 
 
 # Application definition
