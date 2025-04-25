@@ -3,6 +3,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from account import models 
+from course.models import Course, Payment
 
 
 class StudentCreateSerializer(serializers.Serializer):
@@ -15,20 +16,25 @@ class StudentCreateSerializer(serializers.Serializer):
     birth_place = serializers.CharField(required=False)
     live_place = serializers.CharField(required=False)
     profile_photo = serializers.ImageField(required=False)
+    course_id = serializers.IntegerField()
 
     def validate_phone_number(self, phone_number):
-        
         if models.Student.objects.filter(phone_number=phone_number).first():
             raise serializers.ValidationError("this phone number already taken")
-        
         return phone_number 
-
 
     def validate_passport_series(self, passport_series):
         if passport_series and models.Student.objects.filter(passport_series=passport_series).first():
                 raise serializers.ValidationError("this passport_series already taken")
         return passport_series 
 
+    def validate(self, data):
+        try:
+            course = Course.objects.get(id=data['course_id'])
+        except Course.DoesNotExist:
+            raise serializers.ValidationError("course not found")
+        data['course'] = course
+        return data
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -43,6 +49,14 @@ class StudentCreateSerializer(serializers.Serializer):
                 live_address=validated_data.get('live_place', None),
                 profile_photo=validated_data.get('profile_photo', None)
             )
+            payment = Payment.objects.create(
+                student=student,
+                course=validated_data['course'],
+                paid=0,
+                debt=validated_data['course'].price,
+                is_debt=False
+            )
+
             return student
 
 

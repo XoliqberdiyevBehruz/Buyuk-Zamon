@@ -5,7 +5,7 @@ from course import views
 urlpatterns = [
     path('payment/', include(
         [
-            path('create/', views.PaymentCreateApiView.as_view(), name='payment create api'),
+            # path('create/', views.PaymentCreateApiView.as_view(), name='payment create api'),
             path('<int:id>/edit/', views.PaymentUpdateApiView.as_view(), name='payment update api'),
             path('list/', views.PaymentListApiView.as_view(), name='payment list api'),
         ]
