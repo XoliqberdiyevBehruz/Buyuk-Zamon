@@ -1,3 +1,7 @@
 venv
 media
-__paycache__
+./core/__paycache__
+./course/migrations/__paycache__
+./account/migrations/__paycache__
+./account/__paycache__
+./course/__paycache__
