@@ -3,7 +3,9 @@ from django.db.models import Q
 from rest_framework import status, generics, permissions, parsers, views
 from rest_framework.response import Response
 
-from account import serializers, models
+from django_filters.rest_framework import DjangoFilterBackend
+
+from account import serializers, models, filters
 
 
 class StudentCreateApiView(generics.GenericAPIView):
@@ -81,6 +83,8 @@ class StudentListApiView(generics.ListAPIView):
     queryset = models.Student.objects.order_by('-created_at')
     serializer_class = serializers.StudentListSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.StudentFilter
 
 
 class StudentAddApiView(generics.CreateAPIView):
