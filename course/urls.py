@@ -8,6 +8,7 @@ urlpatterns = [
             # path('create/', views.PaymentCreateApiView.as_view(), name='payment create api'),
             path('<int:id>/edit/', views.PaymentUpdateApiView.as_view(), name='payment update api'),
             path('list/', views.PaymentListApiView.as_view(), name='payment list api'),
+            path('<int:id>/', views.PaymentDetailApiView.as_view(), name='payment get api'),
         ]
     )),
     path('course/', include(

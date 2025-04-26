@@ -37,3 +37,10 @@ class PaymentListApiView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.PaymentFilter
+
+
+class PaymentDetailApiView(generics.RetrieveAPIView):
+    serializer_class = serializers.PaymentListSerializer
+    queryset = models.Payment.objects.order_by('-created_at')
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
