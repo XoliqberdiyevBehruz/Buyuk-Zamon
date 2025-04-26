@@ -54,7 +54,7 @@ class StudentCreateSerializer(serializers.Serializer):
                 course=validated_data['course'],
                 paid=0,
                 debt=validated_data['course'].price,
-                is_debt=False
+                is_debt=True
             )
 
             return student
