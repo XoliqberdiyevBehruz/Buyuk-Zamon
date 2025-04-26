@@ -5,10 +5,15 @@ from account import models
 
 
 @receiver(post_save, sender=models.Payment)
-def change_student_info(sender, **kwargs): 
-    user = sender.user
-    user.paid = sender.price
-    user.debt = user.debt - user.price
+def change_student_info(sender, instance, **kwargs): 
+
+
+    user = instance.user
+    user.paid = int(instance.price)
+    if user.debt > user.paid:
+        user.debt = user.debt - user.paid
+    else:
+        user.debt = user.paid - user.debt
     if user.debt == 0:
         user.is_debt = False
     user.save()
