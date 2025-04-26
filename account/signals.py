@@ -7,7 +7,7 @@ from account import models
 @receiver(post_save, sender=models.Payment)
 def change_student_info(sender, **kwargs): 
     user = sender.user
-    user.paid = int(sender.price)
+    user.paid = sender.price
     user.debt = user.debt - user.price
     if user.debt == 0:
         user.is_debt = False
