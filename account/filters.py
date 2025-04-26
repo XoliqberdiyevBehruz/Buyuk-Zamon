@@ -20,7 +20,7 @@ class StudentFilter(django_filters.FilterSet):
         if value == True:
             return queryset.filter(is_debt=True)
         elif value == False:
-            return queryset.order_by(is_debt=False)
+            return queryset.filter(is_debt=False)
         else:
             return queryset.order_by('-created_at')
 
