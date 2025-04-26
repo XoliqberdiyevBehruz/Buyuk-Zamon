@@ -27,8 +27,8 @@ class Student(BaseModel):
     telegram_link = models.CharField(max_length=200, null=True, blank=True)
     contract_number = models.CharField(max_length=250, null=True, blank=True)
     course_price = models.CharField(max_length=250, null=True, blank=True)
-    paid = models.CharField(max_length=250, null=True, blank=True)
-    debt = models.CharField(max_length=250, null=True, blank=True)
+    paid = models.IntegerField(null=True, blank=True)
+    debt = models.IntegerField(null=True, blank=True)
     is_debt = models.BooleanField(default=False)
 
     def __str__(self):
