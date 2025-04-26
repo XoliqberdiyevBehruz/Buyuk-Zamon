@@ -52,3 +52,11 @@ class StudentListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt'
         ]
+
+
+class StudentAddSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Student
+        fields = [
+            'full_name', 'phone_number', 'telegram_link', 'contract_number', 'course_price'
+        ]

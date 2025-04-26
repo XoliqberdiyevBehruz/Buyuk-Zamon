@@ -81,4 +81,10 @@ class StudentListApiView(generics.ListAPIView):
     queryset = models.Student.objects.order_by('-created_at')
     serializer_class = serializers.StudentListSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class StudentAddApiView(generics.CreateAPIView):
+    serializer_class = serializers.StudentAddSerializer
+    queryset = models.Student
+    permission_classes = [permissions.IsAuthenticated]
     

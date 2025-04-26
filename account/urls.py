@@ -20,6 +20,7 @@ urlpatterns = [
     path('crm/', include(
         [
             path('student/list/', views.StudentListApiView.as_view()),
+            path('student/add/', views.StudentAddApiView.as_view()),
         ]
     ))
 ]
