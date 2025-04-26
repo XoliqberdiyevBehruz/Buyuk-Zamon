@@ -8,7 +8,7 @@ from account import models
 class StudentFilter(django_filters.FilterSet):
     is_debt = django_filters.BooleanFilter(method='filter_is_debt')
     a_to_z = django_filters.BooleanFilter(method='filter_a_to_z')
-    search = django_filters.CharFilter(method='search')
+    search = django_filters.CharFilter(method='filter_search')
 
     class Meta:
         model = models.Student
@@ -33,7 +33,7 @@ class StudentFilter(django_filters.FilterSet):
             return queryset.order_by('-created_at')
 
 
-    def search(self, queryset, name, value):
+    def filter_search(self, queryset, name, value):
         return queryset.filter(
             Q(full_name__icontains=value) |
             Q(phone_number__icontains=value) |
