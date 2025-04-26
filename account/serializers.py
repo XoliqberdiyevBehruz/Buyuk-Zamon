@@ -60,3 +60,16 @@ class StudentAddSerializer(serializers.ModelSerializer):
         fields = [
             'full_name', 'phone_number', 'telegram_link', 'contract_number', 'course_price'
         ]
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            student = models.Student.objects.create(
+                full_name=validated_data['full_name'],
+                phone_number=validated_data['phone_number'],
+                telegram_link=validated_data['telegram_link'],
+                contract_number=validated_data['contract_number'],
+                course_price=validated_data['course_price'],
+                debt=validated_data['course_price'],
+                is_debt=True,
+            )
+            return student
