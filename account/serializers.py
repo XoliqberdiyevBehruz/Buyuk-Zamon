@@ -47,7 +47,6 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 
 class StudentListSerializer(serializers.ModelSerializer):
-    payment = serializers.SerializerMethodField() 
     class Meta:
         model = models.Student
         fields = [
