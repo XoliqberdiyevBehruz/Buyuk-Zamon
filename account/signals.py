@@ -12,8 +12,9 @@ def change_student_info(sender, instance, **kwargs):
     user.paid = (user.paid if user.paid else 0) + int(instance.price)
     if user.debt > user.paid:
         user.debt = user.debt - user.paid
-    else:
-        user.debt = user.paid - user.debt
+        if user.debt < 0:
+            user.debt = 0
+            user.save()
     if user.debt == 0:
         user.is_debt = False
     user.save()
