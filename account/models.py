@@ -18,19 +18,29 @@ class User(BaseModel, AbstractUser):
 
 
 class Student(BaseModel):
-    first_name = models.CharField(max_length=25)
-    last_name = models.CharField(max_length=25)
-    father_name = models.CharField(max_length=25, null=True, blank=True)
-    birth_date = models.DateField(null=True, blank=True)
+    full_name = models.CharField(max_length=25)
     phone_number = models.CharField(max_length=15, unique=True)
-    passport_series = models.CharField(max_length=10, null=True, blank=True, unique=True)
-    birth_place = models.CharField(max_length=50, null=True, blank=True)
-    live_address = models.CharField(max_length=50, null=True, blank=True)
+    total_price = models.CharField(max_length=250, null=True, blank=True)
     profile_photo = models.ImageField(upload_to='account/student/profile_photo/%Y/%m/', null=True, blank=True)
+    card_number = models.CharField(max_length=16)
+    group_id = models.CharField(max_length=250)
+    telegram_link = models.CharField(max_length=200, null=True, blank=True)
+    contract_number = models.CharField(max_length=250, null=True, blank=True)
+    course_price = models.CharField(max_length=250, null=True, blank=True)
+    paid = models.CharField(max_length=250, null=True, blank=True)
+    debt = models.CharField(max_length=250, null=True, blank=True)
+    is_debt = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.first_name + self.last_name
+        return self.full_name
     
 
+class Payment(BaseModel):
+    user = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, related_name='payments')
+    payment_time = models.CharField(max_length=200)
+    price = models.CharField(max_length=250)
+    payment_id = models.CharField(max_length=250)
 
+    def __str__(self):
+        return self.price 
 

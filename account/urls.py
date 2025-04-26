@@ -8,11 +8,18 @@ urlpatterns = [
     path('login/', TokenObtainPairView.as_view(), name='login'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    path('student/', include(
+    path('bot/', include(
         [
-            path('create/', views.StudentCreateApiView.as_view(), name='student create api'),
-            path('<int:student_id>/', views.StudentDetailApiView.as_view(), name='get student by id api'),
-            path('<int:id>/edit/', views.StudentUpdateApiView.as_view(), name='student update api'),
+            path('user/create/', views.StudentCreateApiView.as_view(), name='user create'),
+            path('user/get/', views.StudentGetPhoneNumberApiView.as_view()),
+            path('payment/create/', views.PaymentCreateApiView.as_view()),
+            path('payment/get/', views.PaymentGetApiView.as_view()),
+            path('user/<int:id>/total_price/add/', views.UserTotalPriceUpdateApiView.as_view()),
+        ]
+    )),
+    path('crm/', include(
+        [
+            path('student/list/', views.StudentListApiView.as_view()),
         ]
     ))
 ]

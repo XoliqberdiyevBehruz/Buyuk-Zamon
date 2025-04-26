@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-ya$+9uo*mxuk5ochu10aqwsptudr27ob9dq#85r%oboj#jxobi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['buyuk.zamon.crm.repid.uz']
+ALLOWED_HOSTS = ['buyuk.zamon.crm.repid.uz', '127.0.0.1']
 
 
 # Application definition
@@ -32,7 +32,6 @@ INSTALLED_APPS = [
     'corsheaders',
 
     'account',
-    'course',
 ]
 
 MIDDLEWARE = [
