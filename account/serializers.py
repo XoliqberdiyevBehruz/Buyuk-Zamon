@@ -32,6 +32,10 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
             'user', 'payment_time', 'price', 'payment_id'
         ]
 
+        extra_kwargs = (
+            {"user": {'required': False}, "payment_time": {'required': False}, 'price': {'required': False}, 'payment_id': {'required': False}}
+        )
+
 
 class PaymentGetSerializer(serializers.Serializer):
     student_id = serializers.IntegerField()
