@@ -18,7 +18,7 @@ class User(BaseModel, AbstractUser):
 
 
 class Student(BaseModel):
-    full_name = models.CharField(max_length=50, null=True, blank=True)
+    full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15)
     total_price = models.PositiveBigIntegerField(default=0)
     profile_photo = models.ImageField(upload_to='account/student/profile_photo/%Y/%m/', null=True, blank=True)
