@@ -35,6 +35,10 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
         extra_kwargs = (
             {"user": {'required': False}, "payment_time": {'required': False}, 'price': {'required': False}, 'payment_id': {'required': False}}
         )
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            return models.Payment.objects.create(**validated_data)
 
 
 class PaymentGetSerializer(serializers.Serializer):
