@@ -59,12 +59,17 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 
 class StudentListSerializer(serializers.ModelSerializer):
+    payment_time = serializers.SerializerMethodField(method_name='get_payment_time')
+
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time'
         ]
 
+    def get_payment_time(self, obj):
+        payment = models.Payment.objects.filter('-payment_time').first()
+        return payment
 
 class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:

@@ -37,6 +37,7 @@ class StudentFilter(django_filters.FilterSet):
         return queryset.filter(
             Q(full_name__icontains=value) |
             Q(phone_number__icontains=value) |
-            Q(contract_number__icontains=value)
+            Q(contract_number__icontains=value) |
+            Q(card_number__icontains=value)
         )
     
