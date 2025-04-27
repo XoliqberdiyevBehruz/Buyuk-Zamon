@@ -29,7 +29,7 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
         try:
             student = models.Student.objects.get(
                 full_name=data['full_name'], 
-                phone_number=data['phone_number'], 
+                phone_number__icontains=data['phone_number'], 
                 card_number=data['card_number']
             )
             return Response({
