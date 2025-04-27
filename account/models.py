@@ -42,5 +42,5 @@ class Payment(BaseModel):
     payment_id = models.CharField(max_length=250, null=True, blank=True)
 
     def __str__(self):
-        return self.price 
+        return str(self.price)
 
