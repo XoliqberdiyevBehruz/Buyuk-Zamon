@@ -34,6 +34,9 @@ class Student(BaseModel):
     def __str__(self):
         return self.full_name
     
+    class Meta:
+        unique_together = ('phone_number', 'full_name', 'card_number')
+    
 
 class Payment(BaseModel):
     user = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='payments')
