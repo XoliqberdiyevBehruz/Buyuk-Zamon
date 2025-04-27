@@ -32,13 +32,16 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
                 Q(full_name__icontains=data.get('full_name', None)) |
                 Q(phone_number__icontains=data.get('phone_number', None)) |
                 Q(card_number__icontains=data.get('card_number', None)) 
-            )
-            return Response({
-                "message": True,
-                "id":student.first().id,
-                "telegram_link":student.first().telegram_link
-            }, status=status.HTTP_200_OK)
-    
+            ).first()
+            if student:
+                return Response({
+                    "message": True,
+                    "id":student.id,
+                    "telegram_link":student.telegram_link
+                }, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
 class PaymentCreateApiView(generics.CreateAPIView):
     serializer_class = serializers.PaymentCreateSerializer
