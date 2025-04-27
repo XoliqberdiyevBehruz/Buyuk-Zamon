@@ -15,9 +15,9 @@ class StudentCreateApiView(generics.GenericAPIView):
     def post(self, request):
         serializer = serializers.StudentCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            student = serializer.save()
             return Response({'message': True,
-                             "id":serializer.data.student.id}, status=status.HTTP_201_CREATED)
+                             "id": student.id}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -35,8 +35,8 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
             )
             return Response({
                 "message": True,
-                "id":student.id,
-                "telegram_link":student.telegram_link
+                "id":student.first().id,
+                "telegram_link":student.first().telegram_link
             }, status=status.HTTP_200_OK)
     
 
