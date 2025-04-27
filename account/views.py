@@ -68,9 +68,9 @@ class PaymentGetApiView(generics.GenericAPIView):
 class UserTotalPriceUpdateApiView(generics.GenericAPIView):
     serializer_class = serializers.AddTotalPriceSerializer
     
-    def post(self, request, user_id):
+    def post(self, request, id):
         try:
-            user = models.Student.objects.get(id=user_id)
+            user = models.Student.objects.get(id=id)
         except models.Student.DoesNotExist:
             return Response({'message': "not found"}, status=status.HTTP_404_NOT_FOUND)
         serializer = serializers.AddTotalPriceSerializer(data=request.data)
