@@ -15,6 +15,7 @@ urlpatterns = [
             path('payment/create/', views.PaymentCreateApiView.as_view()),
             path('payment/get/', views.PaymentGetApiView.as_view()),
             path('user/<int:id>/total_price/add/', views.UserTotalPriceUpdateApiView.as_view()),
+            path('user/<str:phone_number>/', views.StudentGetNumberApiView.as_view()),
         ]
     )),
     path('crm/', include(

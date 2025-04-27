@@ -29,7 +29,7 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
         try:
             student = models.Student.objects.get(
                 full_name=data['full_name'], 
-                phone_number__icontains=data['phone_number'], 
+                phone_number=data['phone_number'], 
                 card_number=data['card_number']
             )
             return Response({
@@ -39,6 +39,20 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
             }, status=status.HTTP_200_OK)
         except models.Student.DoesNotExist:
             return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class StudentGetNumberApiView(generics.GenericAPIView):
+    queryset = models.Student.objects.all()
+
+    def get(self, request, phone_number):
+        student = models.Student.objects.filter(phone_number__icontains=phone_number).first()
+        if not student:
+            return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({
+                "message": True,
+                "id": student.id,
+                "telegram_link": student.telegram_link
+            }, status=status.HTTP_200_OK)
 
 
 class PaymentCreateApiView(generics.CreateAPIView):
