@@ -10,9 +10,9 @@ class StudentCreateSerializer(serializers.ModelSerializer):
         fields = [
             'full_name', 'phone_number', 'card_number', 'group_id',
         ]
-        extra_kwargs = {
+        extra_kwargs = (
             {"full_name": {'required': False}, "phone_number": {'required': False}, 'card_number': {'required': False}, 'group_id': {'required': False}}
-        }
+        )
 
     def create(self, validated_date):
         with transaction.atomic():
