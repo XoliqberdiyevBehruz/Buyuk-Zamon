@@ -43,9 +43,16 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
                 return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-class PaymentCreateApiView(generics.CreateAPIView):
+class PaymentCreateApiView(generics.GenericAPIView):
     serializer_class = serializers.PaymentCreateSerializer
     queryset = models.Payment
+
+    def post(self, request):
+        serializer = serializers.PaymentCreateSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
 
@@ -76,7 +83,7 @@ class UserTotalPriceUpdateApiView(generics.GenericAPIView):
         serializer = serializers.AddTotalPriceSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             data = serializer.data
-            user.total_price += data['total_price']
+            user.total_price += int(data['total_price'])
             user.save()
             return Response(status=status.HTTP_200_OK)
         return Response(status=status.HTTP_400_BAD_REQUEST)
