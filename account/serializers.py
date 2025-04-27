@@ -21,6 +21,7 @@ class StudentCreateSerializer(serializers.ModelSerializer):
                 phone_number=validated_date['phone_number'],
                 card_number=validated_date['card_number'],
                 group_id=validated_date['group_id'],
+                is_debt=True
             )
             return student
 
