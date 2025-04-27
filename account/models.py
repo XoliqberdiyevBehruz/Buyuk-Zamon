@@ -30,7 +30,6 @@ class Student(BaseModel):
     paid = models.IntegerField(null=True, blank=True)
     debt = models.IntegerField(null=True, blank=True)
     is_debt = models.BooleanField(default=False)
-
     def __str__(self):
         return self.full_name
     
@@ -46,4 +45,3 @@ class Payment(BaseModel):
 
     def __str__(self):
         return str(self.price)
-
