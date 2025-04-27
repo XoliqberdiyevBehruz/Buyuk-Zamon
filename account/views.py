@@ -29,9 +29,9 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
         if serializer.is_valid(raise_exception=True):
             data = serializer.data
             student = models.Student.objects.filter(
-                Q(full_name__icontains=data.get('full_name', None)) |
-                Q(phone_number__icontains=data.get('phone_number', None)) |
-                Q(card_number__icontains=data.get('card_number', None)) 
+                full_name=data.get('full_name', None), 
+                phone_number=data.get('phone_number', None),
+                card_number=data.get('card_number', None), 
             ).first()
             if student:
                 return Response({
