@@ -6,4 +6,6 @@ from account import models
 
 
 admin.site.register(models.Student)
-admin.site.register(models.Payment)
+@admin.register(models.Payment)
+class PaymentAdmin(admin.ModelAdmin):
+    list_display = ['id', 'price', 'payment_time']
