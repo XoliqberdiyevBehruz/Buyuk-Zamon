@@ -103,7 +103,7 @@ class StudentAddApiView(generics.CreateAPIView):
 
 
 class StudentApiView(generics.RetrieveUpdateAPIView):
-    serializer_class = serializers.StudentAddSerializer
+    serializer_class = serializers.StudentDetailSerializer
     queryset = models.Student
     permission_classes = [permissions.IsAuthenticated]
     lookup_field = 'id'
