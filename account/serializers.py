@@ -68,7 +68,7 @@ class StudentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_payment_time(self, obj):
-        payment = models.Payment.objects.filter('-payment_time').first()
+        payment = models.Payment.objects.filter(user=obj).order_by('-payment_time').first()
         return payment
 
 class StudentAddSerializer(serializers.ModelSerializer):
