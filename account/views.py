@@ -145,3 +145,51 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
     
     def perform_update(self, serializer):
         serializer.save()
+
+    
+class PaymentAddApiView(generics.GenericAPIView):
+    serializer_class = serializers.PaymentAddSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        serializer = serializers.PaymentAddSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            payment = serializer.save()
+            return Response(
+                {
+                    "id": payment.id,
+                    "payment_price": payment.price,
+                    "payment_time": payment.payment_time,
+                    "payment_type": payment.type
+                }, status=status.HTTP_201_CREATED
+            )
+        
+
+class PaymentListApiView(generics.GenericAPIView):
+    serializer_class = serializers.PaymentListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, student_id):
+        payments = models.Payment.objects.filter(user__id=student_id)
+        serializer = serializers.PaymentListSerializer(data=payments, many=True)
+        serializer.is_valid()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class PaymentUpdateApiView(generics.GenericAPIView):
+    serializer_class = serializers.PaymentUpdateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def put(self, request, payment_id):
+        try:
+            payment = models.Payment.objects.get(id=payment_id)
+        except models.Payment.DoesNotExist:
+            return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+        if payment.type == 'naxt':
+            serializer = serializers.PaymentUpdateSerializer(data=request.data)
+            if serializer.is_valid(raise_exception=True):
+                serializer.save()
+                return Response({"success": True}, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'message': 'you cannot update this payment'}, status=status.HTTP_400_BAD_REQUEST)
+    

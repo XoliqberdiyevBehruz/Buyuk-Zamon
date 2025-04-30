@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django.db import transaction
 
 from rest_framework import serializers
@@ -99,3 +100,46 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'card_number', 'telegram_link'
         ]
+
+
+class PaymentAddSerializer(serializers.Serializer):
+    user_id = serializers.IntegerField()
+    price = serializers.IntegerField()
+
+    def validate(self, data):
+        try:
+            student = models.Student.objects.get(id=data['user_id'])
+        except models.Student.DoesNotExist:
+            raise serializers.ValidationError('student not found')  
+        data['student'] = student
+        return data
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            payment = models.Payment.objects.create(
+                user=validated_data['student'],
+                price=validated_data['price'],
+                payment_time=timezone.now()
+            )    
+            return payment
+        
+    
+class PaymentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Payment
+        fields = [
+            'id', 'payment_time', 'price', 'type'
+        ]
+    
+
+class PaymentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Payment
+        fields = [
+            'price'
+        ]
+
+    def update(self, instance, validated_data):
+        instance.price = validated_data['price']
+        instance.save()
+        return instance
