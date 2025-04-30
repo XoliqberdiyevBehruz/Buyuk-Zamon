@@ -71,7 +71,7 @@ class StudentListSerializer(serializers.ModelSerializer):
         ]
 
     def get_payment_type(self, obj):
-        return models.Payment.objects.filter(user=obj).order_by('-created_at').first().type
+        return models.Payment.objects.filter(user=obj).order_by('-created_at').first().type if models.Payment.objects.filter(user=obj).order_by('-created_at').first() else None
 
     def get_payment_time(self, obj):
         payment = models.Payment.objects.filter(user=obj).order_by('-payment_time').first()
