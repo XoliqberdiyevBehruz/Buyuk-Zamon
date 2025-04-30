@@ -62,44 +62,16 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 class StudentListSerializer(serializers.ModelSerializer):
     payment_time = serializers.SerializerMethodField(method_name='get_payment_time')
-    cash = serializers.SerializerMethodField(method_name='get_cash')
-    click = serializers.SerializerMethodField(method_name='get_click')
-    alif = serializers.SerializerMethodField(method_name='get_alif')
-    uzum = serializers.SerializerMethodField(method_name='get_uzum')
-    anor = serializers.SerializerMethodField(method_name='get_anor')
-    account_number = serializers.SerializerMethodField(method_name='get_account_number')
-    zoodpay = serializers.SerializerMethodField(method_name='get_zoodpay')
-    visa = serializers.SerializerMethodField(method_name='get_visa')
+    payment_type = serializers.SerializerMethodField(method_name='get_payment_type')
 
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'cash', 'click', 'alif', 'uzum', 'anor', 'account_number', 'zoodpay', 'visa'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'payment_type'
         ]
 
-    def get_cash(self, obj):
-        return models.Payment.objects.filter(user=obj, type='naqd').aggregate(cash=Sum('price'))['cash']
-    
-    def get_click(self, obj):
-        return models.Payment.objects.filter(user=obj, type='click').aggregate(click=Sum('price'))['click']
-    
-    def get_alif(self, obj):
-        return models.Payment.objects.filter(user=obj, type='alif_bank').aggregate(alif=Sum('price'))['alif']
-    
-    def get_uzum(self, obj):
-        return models.Payment.objects.filter(user=obj, type='uzum_bank').aggregate(uzum=Sum('price'))['uzum']
-    
-    def get_anor(self, obj):
-        return models.Payment.objects.filter(user=obj, type='anor_bank').aggregate(anor=Sum('price'))['anor']
-    
-    def get_account_number(self, obj):
-        return models.Payment.objects.filter(user=obj, type='hisob_raqam').aggregate(account_number=Sum('price'))['account_number']
-    
-    def get_zoodpay(self, obj):
-        return models.Payment.objects.filter(user=obj, type='zoodpay').aggregate(zoodpay=Sum('price'))['zoodpay']
-    
-    def get_visa(self, obj):
-        return models.Payment.objects.filter(user=obj, type='visa').aggregate(visa=Sum('price'))['visa']
+    def get_payment_type(self, obj):
+        return models.Payment.objects.filter(user=obj).order_by('-created_at').first().type
 
     def get_payment_time(self, obj):
         payment = models.Payment.objects.filter(user=obj).order_by('-payment_time').first()
