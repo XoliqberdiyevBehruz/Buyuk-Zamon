@@ -24,8 +24,9 @@ urlpatterns = [
             path('student/add/', views.StudentAddApiView.as_view()),
             path('student/<int:id>/', views.StudentApiView.as_view()),
             path('payment/add/', views.PaymentAddApiView.as_view(),),
-            path('student/<student_id>/payment/list/', views.PaymentListApiView.as_view()),
-            
+            path('student/<int:student_id>/payment/list/', views.PaymentListApiView.as_view()),
+            path('payment/<int:payment_id>/update/', views.PaymentUpdateApiView.as_view()),
+            path('payment/<int:id>/delete/', views.PaymentDeleteApiView.as_view()),
         ]
     ))
 ]

@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+PREMIUM, VIP, BUSINESS = ('premium', 'vip', 'biznes')
+CASH, CREDIT, CARD = ('naqd', 'nasya', 'karta')
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +20,16 @@ class User(BaseModel, AbstractUser):
 
 
 class Student(BaseModel):
+    TARIFF = (
+        (PREMIUM, PREMIUM),
+        (VIP, VIP),
+        (BUSINESS, BUSINESS),
+    )
+    PAYMENT_TYPE = (
+        (CASH, CASH), 
+        (CREDIT, CREDIT),
+        (CARD, CARD),
+    )
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15)
     total_price = models.PositiveBigIntegerField(default=0)
@@ -30,6 +42,9 @@ class Student(BaseModel):
     paid = models.IntegerField(null=True, blank=True)
     debt = models.IntegerField(null=True, blank=True)
     is_debt = models.BooleanField(default=False)
+    tariff = models.CharField(max_length=50, choices=TARIFF)
+    payment_type = models.CharField(max_length=15, choices=PAYMENT_TYPE)
+
     def __str__(self):
         return self.full_name
     
@@ -39,7 +54,7 @@ class Student(BaseModel):
 
 class Payment(BaseModel):
     PAYMENT_TYPE = (
-        ('naxt', 'naxt'),
+        ('naqd', 'naqd'),
         ('click', 'click'),
         ('alif_bank', 'alif_bank'),
         ('uzum_bank', 'uzum_bank'),

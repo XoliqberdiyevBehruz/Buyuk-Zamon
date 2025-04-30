@@ -2,6 +2,7 @@ from django.db.models import Q
 
 from rest_framework import status, generics, permissions, parsers, views
 from rest_framework.response import Response
+from rest_framework.exceptions import ValidationError
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -43,6 +44,7 @@ class StudentGetPhoneNumberApiView(generics.GenericAPIView):
 
 class StudentGetNumberApiView(generics.GenericAPIView):
     queryset = models.Student.objects.all()
+    serializer_class = None
 
     def get(self, request, phone_number):
         student = models.Student.objects.filter(phone_number__icontains=phone_number).first()
@@ -114,6 +116,7 @@ class StudentAddApiView(generics.CreateAPIView):
     serializer_class = serializers.StudentAddSerializer
     queryset = models.Student
     permission_classes = [permissions.IsAuthenticated]
+    parser_classes = [parsers.FormParser, parsers.MultiPartParser]
 
 
 class StudentApiView(generics.RetrieveUpdateAPIView):
@@ -147,30 +150,18 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
         serializer.save()
 
     
-class PaymentAddApiView(generics.GenericAPIView):
+class PaymentAddApiView(generics.CreateAPIView):
     serializer_class = serializers.PaymentAddSerializer
     permission_classes = [permissions.IsAuthenticated]
+    queryset = models.Payment.objects.all()
 
-    def post(self, request):
-        serializer = serializers.PaymentAddSerializer(data=request.data)
-        if serializer.is_valid(raise_exception=True):
-            payment = serializer.save()
-            return Response(
-                {
-                    "id": payment.id,
-                    "payment_price": payment.price,
-                    "payment_time": payment.payment_time,
-                    "payment_type": payment.type
-                }, status=status.HTTP_201_CREATED
-            )
-        
 
 class PaymentListApiView(generics.GenericAPIView):
     serializer_class = serializers.PaymentListSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, student_id):
-        payments = models.Payment.objects.filter(user__id=student_id)
+        payments = models.Payment.objects.filter(user__id=student_id).order_by('-created_at')
         serializer = serializers.PaymentListSerializer(data=payments, many=True)
         serializer.is_valid()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -186,10 +177,19 @@ class PaymentUpdateApiView(generics.GenericAPIView):
         except models.Payment.DoesNotExist:
             return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
         if payment.type == 'naxt':
-            serializer = serializers.PaymentUpdateSerializer(data=request.data)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response({"success": True}, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            serializer = serializers.PaymentUpdateSerializer(instance=payment, data=request.data)
+            serializer.is_valid()
+            serializer.save()
+            return Response({"success": True}, status=status.HTTP_200_OK)
         return Response({'message': 'you cannot update this payment'}, status=status.HTTP_400_BAD_REQUEST)
-    
+
+
+class PaymentDeleteApiView(generics.DestroyAPIView):
+    queryset = models.Payment.objects.all()
+    permission_classes = [permissions.IsAuthenticated,]
+    lookup_field = 'id'
+
+    def perform_destroy(self, instance):
+        if instance.type != 'naqd':
+            raise ValidationError({'error': 'you cannot delete this payment'})
+        instance.delete()

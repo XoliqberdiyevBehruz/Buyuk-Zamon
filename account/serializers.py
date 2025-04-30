@@ -1,9 +1,10 @@
 from django.utils import timezone
 from django.db import transaction
+from django.db.models import Sum
 
 from rest_framework import serializers
 
-from account import models 
+from account import models, utils
 
 class StudentCreateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -61,12 +62,44 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 class StudentListSerializer(serializers.ModelSerializer):
     payment_time = serializers.SerializerMethodField(method_name='get_payment_time')
+    cash = serializers.SerializerMethodField(method_name='get_cash')
+    click = serializers.SerializerMethodField(method_name='get_click')
+    alif = serializers.SerializerMethodField(method_name='get_alif')
+    uzum = serializers.SerializerMethodField(method_name='get_uzum')
+    anor = serializers.SerializerMethodField(method_name='get_anor')
+    account_number = serializers.SerializerMethodField(method_name='get_account_number')
+    zoodpay = serializers.SerializerMethodField(method_name='get_zoodpay')
+    visa = serializers.SerializerMethodField(method_name='get_visa')
 
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'cash', 'click', 'alif', 'uzum', 'anor', 'account_number', 'zoodpay', 'visa'
         ]
+
+    def get_cash(self, obj):
+        return models.Payment.objects.filter(user=obj, type='naqd').aggregate(cash=Sum('price'))['cash']
+    
+    def get_click(self, obj):
+        return models.Payment.objects.filter(user=obj, type='click').aggregate(click=Sum('price'))['click']
+    
+    def get_alif(self, obj):
+        return models.Payment.objects.filter(user=obj, type='alif_bank').aggregate(alif=Sum('price'))['alif']
+    
+    def get_uzum(self, obj):
+        return models.Payment.objects.filter(user=obj, type='uzum_bank').aggregate(uzum=Sum('price'))['uzum']
+    
+    def get_anor(self, obj):
+        return models.Payment.objects.filter(user=obj, type='anor_bank').aggregate(anor=Sum('price'))['anor']
+    
+    def get_account_number(self, obj):
+        return models.Payment.objects.filter(user=obj, type='hisob_raqam').aggregate(account_number=Sum('price'))['account_number']
+    
+    def get_zoodpay(self, obj):
+        return models.Payment.objects.filter(user=obj, type='zoodpay').aggregate(zoodpay=Sum('price'))['zoodpay']
+    
+    def get_visa(self, obj):
+        return models.Payment.objects.filter(user=obj, type='visa').aggregate(visa=Sum('price'))['visa']
 
     def get_payment_time(self, obj):
         payment = models.Payment.objects.filter(user=obj).order_by('-payment_time').first()
@@ -77,19 +110,23 @@ class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'full_name', 'phone_number', 'telegram_link', 'contract_number', 'course_price'
+            'full_name', 'phone_number', 'telegram_link', 'contract_number', 'payment_type', 'tariff'
         ]
     
     def create(self, validated_data):
         with transaction.atomic():
+            course_price = utils.get_course_price(validated_data['payment_type'], validated_data['tariff'])
             student = models.Student.objects.create(
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
-                telegram_link=validated_data['telegram_link'],
-                contract_number=validated_data['contract_number'],
-                course_price=validated_data['course_price'],
-                debt=validated_data['course_price'],
+                telegram_link=validated_data.get('telegram_link', None),
+                contract_number=validated_data.get('contract_number', None),
+                payment_type=validated_data['payment_type'],
+                tariff=validated_data['tariff'],
+                course_price=course_price,
+                debt=course_price,
                 is_debt=True,
+                paid=0,
             )
             return student
         
@@ -119,7 +156,8 @@ class PaymentAddSerializer(serializers.Serializer):
             payment = models.Payment.objects.create(
                 user=validated_data['student'],
                 price=validated_data['price'],
-                payment_time=timezone.now()
+                payment_time=timezone.now(),
+                type='naqd'
             )    
             return payment
         
@@ -140,6 +178,6 @@ class PaymentUpdateSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        instance.price = validated_data['price']
+        instance.price = validated_data.get('price', instance.price)
         instance.save()
         return instance
