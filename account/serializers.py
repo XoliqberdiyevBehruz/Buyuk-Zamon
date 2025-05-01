@@ -67,7 +67,7 @@ class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'payment_type'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'payment_type', 'tariff'
         ]
 
     def get_payment_type(self, obj):
@@ -82,7 +82,7 @@ class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'full_name', 'phone_number', 'telegram_link', 'contract_number', 'payment_type', 'tariff'
+            'full_name', 'phone_number', 'contract_number', 'payment_type', 'tariff'
         ]
     
     def create(self, validated_data):
@@ -91,7 +91,6 @@ class StudentAddSerializer(serializers.ModelSerializer):
             student = models.Student.objects.create(
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
-                telegram_link=validated_data.get('telegram_link', None),
                 contract_number=validated_data.get('contract_number', None),
                 payment_type=validated_data['payment_type'],
                 tariff=validated_data['tariff'],
@@ -107,13 +106,16 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'card_number', 'telegram_link'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined'
         ]
 
 
 class PaymentAddSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     price = serializers.IntegerField()
+    type = serializers.ChoiceField(choices=(
+        'naqd', 'click', 'alif_bank', 'uzum_bank', 'hisob_raqam', 'zoodpay', 'visa', 'anor_bank'
+    ))
 
     def validate(self, data):
         try:
@@ -129,7 +131,7 @@ class PaymentAddSerializer(serializers.Serializer):
                 user=validated_data['student'],
                 price=validated_data['price'],
                 payment_time=timezone.now(),
-                type='naqd'
+                type=validated_data['type']
             )    
             return payment
         
