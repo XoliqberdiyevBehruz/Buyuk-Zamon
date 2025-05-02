@@ -104,6 +104,19 @@ class UserTotalPriceUpdateApiView(generics.GenericAPIView):
         return Response({'message': 'updated'}, status=status.HTTP_200_OK)
     
 
+class StudentJoinTelegramGroupApiView(generics.GenericAPIView):
+    serializer_class = None
+
+    def get(self, request, id):
+        try:
+            student = models.Student.objects.get(id=id)
+        except models.Student.DoesNotExist:
+            return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+        student.group_joined = True
+        student.save()
+        return Response({"message": "ok"}, status=status.HTTP_200_OK)
+    
+
 class StudentListApiView(generics.ListAPIView):
     queryset = models.Student.objects.order_by('-created_at')
     serializer_class = serializers.StudentListSerializer
