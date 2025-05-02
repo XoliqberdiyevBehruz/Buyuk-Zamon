@@ -76,3 +76,8 @@ class Payment(BaseModel):
 
     def __str__(self):
         return str(self.price)
+    
+    def save(self, *args, **kwargs):
+        if self.type == 'naqd':
+            self.bank = None
+        super().save(*args, **kwargs)
