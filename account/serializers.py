@@ -113,9 +113,6 @@ class StudentDetailSerializer(serializers.ModelSerializer):
 class PaymentAddSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     price = serializers.IntegerField()
-    type = serializers.ChoiceField(choices=(
-        'naqd', 'click', 'alif_bank', 'uzum_bank', 'hisob_raqam', 'zoodpay', 'visa', 'anor_bank'
-    ))
 
     def validate(self, data):
         try:
@@ -131,7 +128,7 @@ class PaymentAddSerializer(serializers.Serializer):
                 user=validated_data['student'],
                 price=validated_data['price'],
                 payment_time=timezone.now(),
-                type=validated_data['type']
+                type='naqd'
             )    
             return payment
         
