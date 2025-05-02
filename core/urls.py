@@ -19,8 +19,10 @@ schema_view = get_schema_view(
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
-   url='https://buyuk.zamon.crm.repid.uz'
+
 )
+if settings.DEBUG == False:
+   schema_view.url='https://buyuk.zamon.crm.repid.uz'
 
 urlpatterns = [
    path('admin/', admin.site.urls),

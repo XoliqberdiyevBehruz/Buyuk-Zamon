@@ -55,20 +55,24 @@ class Student(BaseModel):
 
 class Payment(BaseModel):
     PAYMENT_TYPE = (
-        ('naqd', 'naqd'),
-        ('click', 'click'),
-        ('alif_bank', 'alif_bank'),
-        ('uzum_bank', 'uzum_bank'),
-        ('hisob_raqam', 'hisob_raqam'),
+        ('cash', 'cash'),
+        ('card', 'card'),
+        ('credit', 'credit'),
+    )
+    BANK = (
+        ('uzum', 'uzum'),
+        ('alif', 'alif'),
+        ('anor', 'anor'),
         ('zoodpay', 'zoodpay'),
-        ('visa', 'visa'),
-        ('anor_bank', 'anor_bank'),
+        ('click', 'click'),
+        ('payme', 'payme'),
     )
     user = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='payments')
     payment_time = models.CharField(max_length=200, null=True, blank=True)
     price = models.PositiveBigIntegerField(null=True, blank=True)
     payment_id = models.CharField(max_length=250, null=True, blank=True)
-    type = models.CharField(max_length=250, choices=PAYMENT_TYPE, default='naxt')
+    type = models.CharField(max_length=50, choices=PAYMENT_TYPE, default='cash')
+    bank = models.CharField(max_length=50, choices=BANK, null=True, blank=True)
 
     def __str__(self):
         return str(self.price)

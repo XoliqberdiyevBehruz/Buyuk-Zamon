@@ -61,22 +61,25 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 
 class StudentListSerializer(serializers.ModelSerializer):
-    payment_time = serializers.SerializerMethodField(method_name='get_payment_time')
-    payment_type = serializers.SerializerMethodField(method_name='get_payment_type')
+    payment = serializers.SerializerMethodField(method_name='get_payment')
 
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'payment_time', 'payment_type', 'tariff'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'tariff', 
+            'payment'
         ]
 
-    def get_payment_type(self, obj):
-        return models.Payment.objects.filter(user=obj).order_by('-created_at').first().type if models.Payment.objects.filter(user=obj).order_by('-created_at').first() else None
+    def get_payment(self, obj):
+        payment = models.Payment.objects.filter(user=obj).order_by('-created_at').first()
+        if payment:
+            return {
+                "payment_time": payment.payment_time,
+                "payment_type": payment.type,
+                "payment_bank": payment.bank
+            }
+        return None
 
-    def get_payment_time(self, obj):
-        payment = models.Payment.objects.filter(user=obj).order_by('-payment_time').first()
-        return payment.payment_time if payment else None
-    
 
 class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
