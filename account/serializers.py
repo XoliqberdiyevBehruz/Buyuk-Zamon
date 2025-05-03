@@ -66,8 +66,8 @@ class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'tariff', 
-            'payment'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'debt', 'is_debt', 'tariff',  
+            'payment', 'group_joined'
         ]
 
     def get_payment(self, obj):
