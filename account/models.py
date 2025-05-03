@@ -31,7 +31,7 @@ class Student(BaseModel):
         (CARD, CARD),
     )
     full_name = models.CharField(max_length=250, null=True, blank=True)
-    phone_number = models.CharField(max_length=15)
+    phone_number = models.CharField(max_length=15, unique=True)
     total_price = models.PositiveBigIntegerField(default=0)
     profile_photo = models.ImageField(upload_to='account/student/profile_photo/%Y/%m/', null=True, blank=True)
     card_number = models.CharField(max_length=16, null=True, blank=True)
