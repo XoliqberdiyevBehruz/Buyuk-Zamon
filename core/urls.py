@@ -21,8 +21,6 @@ schema_view = get_schema_view(
    permission_classes=(IsStaffUserOr404,),
 
 )
-# if settings.DEBUG:
-#    schema_view.url='https://buyuk.zamon.crm.repid.uz'
 
 urlpatterns = [
    path('admin/', admin.site.urls),
