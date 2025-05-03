@@ -22,6 +22,6 @@ def remove_payment_from_student(sender, instance, **kwargs):
         user = instance.user
         user.paid -= instance.price
         user.debt += instance.price
-        if user.debt > user.paid:
+        if user.debt < 0:
             user.is_debt = True
         user.save()
