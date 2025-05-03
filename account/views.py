@@ -53,6 +53,11 @@ class StudentGetNumberApiView(generics.GenericAPIView):
         return Response({
                 "message": True,
                 "id": student.id,
+                "full_name": student.full_name,
+                "course_price": student.course_price,
+                "tariff": student.tariff,
+                "paid": student.paid,
+                "debt": student.debt,
                 "telegram_link": student.telegram_link
             }, status=status.HTTP_200_OK)
 
