@@ -18,7 +18,7 @@ schema_view = get_schema_view(
       license=openapi.License(name="Repid Agancy"),
    ),
    public=True,
-   permission_classes=(IsStaffUserOr404),
+   permission_classes=(IsStaffUserOr404,),
 
 )
 # if settings.DEBUG:
