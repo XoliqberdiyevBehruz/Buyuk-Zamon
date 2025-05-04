@@ -41,7 +41,7 @@ class Student(BaseModel):
     course_price = models.PositiveBigIntegerField(default=10000000)
     paid = models.IntegerField(null=True, blank=True)
     debt = models.IntegerField(null=True, blank=True)
-    is_debt = models.BooleanField(default=False)
+    is_debt = models.BooleanField(default=True)
     tariff = models.CharField(max_length=50, choices=TARIFF)
     payment_type = models.CharField(max_length=15, choices=PAYMENT_TYPE)
     group_joined = models.BooleanField(default=False)
