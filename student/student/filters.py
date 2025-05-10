@@ -2,7 +2,7 @@ from django.db.models import Q
 
 import django_filters
 
-from account import models 
+from student import models 
 
 
 class StudentFilter(django_filters.FilterSet):

@@ -1,0 +1,98 @@
+from rest_framework import generics, status, parsers, views
+from rest_framework.response import Response
+
+from student import models
+from student.bot import serializers
+
+class StudentGetPhoneNumberApiView(generics.GenericAPIView):
+    serializer_class = serializers.UserGetSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        try:
+            student = models.Student.objects.get(
+                full_name=data['full_name'], 
+                phone_number=data['phone_number'], 
+                card_number=data['card_number']
+            )
+            return Response({
+                "message": True,
+                "id": student.id,
+                "telegram_link": student.telegram_link
+            }, status=status.HTTP_200_OK)
+        except models.Student.DoesNotExist:
+            return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class StudentGetNumberApiView(views.APIView):
+    def get(self, request, phone_number):
+        student = models.Student.objects.filter(phone_number__icontains=phone_number).first()
+        if not student:
+            return Response({"message": "user not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({
+                "message": True,
+                "id": student.id,
+                "full_name": student.full_name,
+                "course_price": student.course_price,
+                "tariff": student.tariff,
+                "paid": student.paid,
+                "debt": student.debt,
+                "telegram_link": student.telegram_link
+            }, status=status.HTTP_200_OK)
+
+
+class PaymentGetApiView(generics.GenericAPIView):
+    serializer_class = serializers.PaymentGetSerializer
+    queryset = models.Payment.objects.all()
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        payment = models.Payment.objects.filter(
+            payment_id=data['payment_id'], user_id=data['student_id']
+        ).first()
+
+        if payment:
+            return Response({
+                'payment_id': payment.payment_id,
+                'user': payment.user.id,
+                'price': payment.price
+            }, status=status.HTTP_200_OK)
+        
+        return Response({'message': 'payment not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class UserTotalPriceUpdateApiView(generics.GenericAPIView):
+    serializer_class = serializers.AddTotalPriceSerializer
+
+    def post(self, request, id, *args, **kwargs):
+        try:
+            user = models.Student.objects.get(id=id)
+        except models.Student.DoesNotExist:
+            return Response({'message': "not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+
+        user.total_price += int(data['total_price'])
+        user.save()
+
+        return Response({'message': 'updated'}, status=status.HTTP_200_OK)
+    
+
+class StudentJoinTelegramGroupApiView(views.APIView):
+    def get(self, request, id):
+        try:
+            student = models.Student.objects.get(id=id)
+        except models.Student.DoesNotExist:
+            return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
+        student.group_joined = True
+        student.save()
+        return Response({"message": "ok"}, status=status.HTTP_200_OK)
+    

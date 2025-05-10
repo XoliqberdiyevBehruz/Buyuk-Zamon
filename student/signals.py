@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from django.db.models.signals import post_save, post_delete
 
-from account import models 
+from student import models 
 
 
 @receiver(post_save, sender=models.Payment)
