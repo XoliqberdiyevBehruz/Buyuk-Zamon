@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-ya$+9uo*mxuk5ochu10aqwsptudr27ob9dq#85r%oboj#jxobi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['buyuk.zamon.crm.repid.uz', '127.0.0.1']
+ALLOWED_HOSTS = ['buyuk.zamon.repid.uz', '127.0.0.1']
 
 
 # Application definition
@@ -153,7 +153,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://buyuk.zamon.crm.repid.uz",
+    "https://buyuk.zamon.repid.uz",
 ]
 
 SIMPLE_JWT = {
