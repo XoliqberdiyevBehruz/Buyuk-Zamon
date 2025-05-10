@@ -36,7 +36,7 @@ class PaymentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Payment
         fields = [
-            'id', 'payment_time', 'price', 'type'
+            'id', 'payment_time', 'price', 'type', 'bank'
         ]
 
 

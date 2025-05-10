@@ -3,6 +3,7 @@ from django.db import transaction
 from rest_framework import serializers
 
 from student import models
+from account.models import Employee
 
 
 class StudentListSerializer(serializers.ModelSerializer):
@@ -11,8 +12,8 @@ class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'course_price', 'paid', 'debt', 'tariff',  
-            'payment', 'group_joined'
+            'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
+            'group_joined', 'status', 'payment', 
         ]
 
     def get_payment(self, obj):
@@ -30,9 +31,16 @@ class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'full_name', 'phone_number', 'contract_number', 'payment_type', 'tariff', 'course_price'
+            'full_name', 'phone_number', 'contract_number', 'payment_type', 'tariff', 'course_price', 'student_id_time', 'employee'
         ]
-    
+
+    def validate(self, data):
+        try:
+            employee = Employee.objects.get(id=data['employee'])
+        except Employee.DoesNotExist:
+            raise serializers.ValidationError("Employee does not exist.")
+        return data
+
     def create(self, validated_data):
         with transaction.atomic():
             student = models.Student.objects.create(
@@ -45,6 +53,8 @@ class StudentAddSerializer(serializers.ModelSerializer):
                 debt=validated_data.get('debt', None),
                 is_debt=True,
                 paid=0,
+                student_id_time=validated_data.get('student_id_time', None),
+                employee=validated_data.get('employee', None),
             )
             return student
         

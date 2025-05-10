@@ -17,28 +17,47 @@ class Student(BaseModel):
         (CREDIT, CREDIT),
         (CARD, CARD),
     )
+    STUDENT_STATUS = (
+        ('prepayment', 'prepayment'),
+        ('partially', 'partially'),
+        ('completed', 'completed'),
+    )
+
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True)
-    total_price = models.PositiveBigIntegerField(default=0)
-    profile_photo = models.ImageField(upload_to='account/student/profile_photo/%Y/%m/', null=True, blank=True)
-    card_number = models.CharField(max_length=16, null=True, blank=True)
-    group_id = models.CharField(max_length=250, null=True, blank=True)
-    telegram_link = models.CharField(max_length=200, null=True, blank=True)
+    student_id_time = models.DateField(null=True, blank=True)
+
     contract_number = models.CharField(max_length=250, null=True, blank=True)
-    course_price = models.PositiveBigIntegerField(default=10000000)
+    course_price = models.PositiveBigIntegerField()
     paid = models.IntegerField(null=True, blank=True)
     debt = models.IntegerField(null=True, blank=True)
     is_debt = models.BooleanField(default=True)
+    
     tariff = models.CharField(max_length=50, choices=TARIFF)
     payment_type = models.CharField(max_length=15, choices=PAYMENT_TYPE)
+    status = models.CharField(max_length=25, choices=STUDENT_STATUS)
+    
+    telegram_link = models.CharField(max_length=200, null=True, blank=True)
     group_joined = models.BooleanField(default=False)
+    suprice = models.BooleanField(default=False)
+
+    employee = models.ForeignKey('account.Employee', on_delete=models.SET_NULL, null=True,related_name='students')
 
     def __str__(self):
         return self.full_name
     
-    class Meta:
-        unique_together = ('phone_number', 'full_name', 'card_number')
-    
+    def save(self, *args, **kwargs):
+        if self.paid < 3_000_000:
+            self.status = 'prepayment'
+            self.is_debt = True
+        elif self.paid > 3_000_000 and self.paid < 17_000_000:
+            self.status = 'partially'
+            self.is_debt = True
+        elif self.paid >= self.course_price:
+            self.status = 'completed'
+            self.is_debt = False
+        return super().save(*args, **kwargs)
+
 
 class Payment(BaseModel):
     PAYMENT_TYPE = (
@@ -81,6 +100,3 @@ class PaymentImage(BaseModel):
 
     def __str__(self):
         return str(self.image)
-    
-
-    
