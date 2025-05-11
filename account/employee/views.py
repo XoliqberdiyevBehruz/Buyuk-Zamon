@@ -29,3 +29,9 @@ class EmployeeUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Employee.objects.all()
     lookup_field = 'id'
+
+
+class PositionListApiView(generics.ListAPIView):
+    serializer_class = serializers.PositionListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = models.Position.objects.all()
