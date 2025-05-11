@@ -32,6 +32,6 @@ class EmployeeUpdateView(generics.UpdateAPIView):
 
 
 class PositionListApiView(generics.ListAPIView):
-    serializer_class = serializers.PositionListSerializer
+    serializer_class = serializers.PositionSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Position.objects.all()
