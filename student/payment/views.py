@@ -45,11 +45,6 @@ class PaymentDeleteApiView(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated,]
     lookup_field = 'id'
 
-    # def perform_destroy(self, instance):
-    #     if instance.type != 'naqd':
-    #         raise ValidationError({'error': 'you cannot delete this payment'})
-    #     instance.delete()
-
 
 class PaymentImagesCreateApiView(generics.CreateAPIView):
     serializer_class = serializers.PaymentImagesCreateSerializer

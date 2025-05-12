@@ -4,16 +4,18 @@ from rest_framework import serializers
 
 from student import models
 from account.models import Employee
+from account.employee.serializers import EmployeeListSerializer
 
 
 class StudentListSerializer(serializers.ModelSerializer):
     payment = serializers.SerializerMethodField(method_name='get_payment')
+    employee = EmployeeListSerializer(read_only=True)
 
     class Meta:
         model = models.Student
         fields = [
             'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
-            'group_joined', 'status', 'payment', 
+            'group_joined', 'status', 'payment', 'employee'
         ]
 
     def get_payment(self, obj):
