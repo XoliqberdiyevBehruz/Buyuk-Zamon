@@ -1,7 +1,7 @@
-from rest_framework import generics, views, permissions, status, parsers, pagination
+from rest_framework import generics, views, permissions, status, parsers
 from rest_framework.response import Response
 
-from account.employee import serializers
+from account.employee import serializers, pagination
 from account import models
 
 
@@ -15,7 +15,7 @@ class EmployeeListView(generics.ListAPIView):
     serializer_class = serializers.EmployeeListSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Employee.objects.all()
-    pagination_class = pagination.PageNumberPagination
+    pagination_class = pagination.CustomPagination
 
 
 class EmployeeDetailView(generics.RetrieveDestroyAPIView):
