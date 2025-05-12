@@ -7,7 +7,7 @@ from student.student import serializers, filters
 from student import models 
 
 class StudentListApiView(generics.ListAPIView):
-    queryset = models.Student.objects.order_by('-created_at')
+    queryset = models.Student.objects.order_by('-created_at').select_related('employee')
     serializer_class = serializers.StudentListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
