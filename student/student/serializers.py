@@ -28,18 +28,21 @@ class StudentListSerializer(serializers.ModelSerializer):
 
 
 class StudentAddSerializer(serializers.ModelSerializer):
+    employee = serializers.PrimaryKeyRelatedField(queryset=Employee.objects.all())
+
     class Meta:
         model = models.Student
         fields = [
             'full_name', 'phone_number', 'contract_number', 'payment_type', 'tariff', 'course_price', 'student_id_time', 'employee'
         ]
 
-    def validate(self, data):
-        try:
-            employee = Employee.objects.get(id=data['employee'])
-        except Employee.DoesNotExist:
-            raise serializers.ValidationError("Employee does not exist.")
-        return data
+    # def validate(self, data):
+    #     try:
+    #         employee = Employee.objects.get(id=data['employee'])
+    #     except Employee.DoesNotExist:
+    #         raise serializers.ValidationError("Employee does not exist.")
+    #     data['employee'] = employee
+    #     return data
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -54,7 +57,7 @@ class StudentAddSerializer(serializers.ModelSerializer):
                 is_debt=True,
                 paid=0,
                 student_id_time=validated_data.get('student_id_time', None),
-                employee=validated_data.get('employee', None),
+                employee=validated_data.get('employee')
             )
             return student
         
