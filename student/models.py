@@ -50,7 +50,7 @@ class Student(BaseModel):
         if self.paid < 3_000_000:
             self.status = 'prepayment'
             self.is_debt = True
-        elif self.paid > 3_000_000 and self.paid < 17_000_000:
+        elif self.paid > 3_000_000 and self.paid < self.course_price:
             self.status = 'partially'
             self.is_debt = True
         elif self.paid >= self.course_price:
