@@ -53,7 +53,7 @@ class StudentAddSerializer(serializers.ModelSerializer):
                 payment_type=validated_data['payment_type'],
                 tariff=validated_data['tariff'],
                 course_price=validated_data.get('course_price', None),
-                debt=validated_data.get('debt', None),
+                debt=validated_data.get('course_price', None),
                 is_debt=True,
                 paid=0,
                 student_id_time=validated_data.get('student_id_time', None),
