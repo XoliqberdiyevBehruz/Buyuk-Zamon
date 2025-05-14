@@ -5,7 +5,7 @@ from student import models
 
 @admin.register(models.Student)
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ['id', 'full_name', 'is_debt', 'paid', 'debt', 'course_price', 'payment_type', 'tariff']
+    list_display = ['id', 'full_name', 'is_debt', 'paid', 'debt', 'course_price', 'tariff']
 
 
 class PaymentImageInline(admin.TabularInline):

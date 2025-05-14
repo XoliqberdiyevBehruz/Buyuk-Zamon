@@ -35,7 +35,7 @@ class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'full_name', 'phone_number', 'contract_number', 'payment_type', 'tariff', 'course_price', 'student_id_time', 'employee'
+            'full_name', 'phone_number', 'contract_number', 'tariff', 'course_price', 'student_id_time', 'employee'
         ]
 
     # def validate(self, data):
@@ -52,7 +52,6 @@ class StudentAddSerializer(serializers.ModelSerializer):
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
                 contract_number=validated_data.get('contract_number', None),
-                payment_type=validated_data['payment_type'],
                 tariff=validated_data['tariff'],
                 course_price=validated_data.get('course_price', None),
                 debt=validated_data.get('course_price', None),

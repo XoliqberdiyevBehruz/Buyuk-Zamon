@@ -12,11 +12,6 @@ class Student(BaseModel):
         (VIP, VIP),
         (BUSINESS, BUSINESS),
     )
-    PAYMENT_TYPE = (
-        (CASH, CASH), 
-        (CREDIT, CREDIT),
-        (CARD, CARD),
-    )
     STUDENT_STATUS = (
         ('prepayment', 'prepayment'),
         ('partially', 'partially'),
@@ -34,7 +29,6 @@ class Student(BaseModel):
     is_debt = models.BooleanField(default=True)
     
     tariff = models.CharField(max_length=50, choices=TARIFF)
-    payment_type = models.CharField(max_length=15, choices=PAYMENT_TYPE)
     status = models.CharField(max_length=25, choices=STUDENT_STATUS)
     
     telegram_link = models.CharField(max_length=200, null=True, blank=True)
