@@ -72,13 +72,13 @@ class EmployeeUpdateSerializer(serializers.ModelSerializer):
 
 
 class EmployeeSalaryCreateSerializer(serializers.Serializer):
-    employee = serializers.IntegerField()
+    employee_id = serializers.IntegerField()
     salary = serializers.IntegerField()
     date = serializers.DateField()
 
     def validate(self, data):
         try:
-            employee = models.Employee.objects.get(id=data['employee'])
+            employee = models.Employee.objects.get(id=data['employee_id'])
         except models.Employee.DoesNotExist:
             raise serializers.ValidationError("Employee does not exist")
         data['employee'] = employee
@@ -86,7 +86,7 @@ class EmployeeSalaryCreateSerializer(serializers.Serializer):
     
     def create(self, validated_data):
         with transaction.atomic():
-            salary = models.Salary.objects.create(
+            salary = models.EmployeeSalary.objects.create(
                 employee=validated_data['employee'],
                 salary=validated_data['salary'],
                 date=validated_data['date']
