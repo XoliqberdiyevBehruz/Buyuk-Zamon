@@ -20,7 +20,7 @@ class IncomeStatisticApiView(views.APIView):
         prediot = request.query_params.get('filter', 'current_month')
 
         if prediot == 'last_week':
-            queryset = queryset.filter(payment_time__day=now - timedelta(days=7))
+            queryset = queryset.filter(payment_time__gte=now - timedelta(days=7), payment_time__lte=now)
         
         elif prediot == 'last_month':
             if now.month == 1:
