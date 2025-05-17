@@ -29,6 +29,8 @@ urlpatterns = [
    path('api/v1/bot/', include('student.bot.urls')),
    path('api/v1/students/', include('student.student.urls')),
    path('api/v1/payments/', include('student.payment.urls')),
+   path('api/v1/expences/', include('finance.expence.urls')),
+   path('api/v1/incomes/', include('finance.income.urls')),
 
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

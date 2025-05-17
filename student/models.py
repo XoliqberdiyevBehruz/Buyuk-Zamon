@@ -73,7 +73,7 @@ class Payment(BaseModel):
     )
 
     user = models.ForeignKey(Student, on_delete=models.SET_NULL, null=True, blank=True, related_name='payments')
-    payment_time = models.CharField(max_length=200, null=True, blank=True)
+    payment_time = models.DateField(null=True)
     price = models.PositiveBigIntegerField(null=True, blank=True)
     payment_id = models.CharField(max_length=250, null=True, blank=True)
     type = models.CharField(max_length=50, choices=PAYMENT_TYPE, default='cash')

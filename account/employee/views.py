@@ -36,3 +36,15 @@ class PositionListApiView(generics.ListAPIView):
     serializer_class = serializers.PositionSerializer
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Position.objects.all()
+
+
+class EmployeeDashboardApiView(generics.ListAPIView):
+    serializer_class = serializers.EmployeeDashboardSerializer
+    permission_classes =  [permissions.IsAuthenticated]
+    queryset = models.Employee.objects.all()
+
+
+class EmployeeSalarCreateyApiView(generics.CreateAPIView):
+    serializer_class = serializers.EmployeeSalaryCreateSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = models.EmployeeSalary.objects.all()

@@ -16,7 +16,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     list_filter = ('is_staff', 'is_active')
     fieldsets = (
         (None, {"fields": ("phone_number", "password")}),
-        ("Personal info", {"fields": ("full_name", "position")}),
+        ("Personal info", {"fields": ("full_name", "position", 'salary', 'date_of_joined', 'paid', 'indebtedness')}),
         (
             "Permissions",
             {
@@ -36,3 +36,10 @@ class PositionAdmin(admin.ModelAdmin):
     ordering = ('id',)
     search_fields = ('name',)
     list_filter = ('name',)
+
+@admin.register(models.EmployeeSalary)
+class EmployeeSalary(admin.ModelAdmin): 
+    list_display = ('id', 'employee', 'salary', 'date')
+    ordering = ('id',)
+    search_fields = ('employee__full_name',)
+    list_filter = ('employee__full_name',)

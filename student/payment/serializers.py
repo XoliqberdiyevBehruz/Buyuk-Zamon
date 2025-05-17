@@ -8,7 +8,7 @@ from student import models
 class PaymentAddSerializer(serializers.Serializer):
     user_id = serializers.IntegerField()
     price = serializers.IntegerField()
-    payment_time = serializers.CharField()
+    payment_time = serializers.DateField()
     type = serializers.ChoiceField(choices=models.Payment.PAYMENT_TYPE)
     bank = serializers.ChoiceField(choices=models.Payment.BANK, required=False)
 

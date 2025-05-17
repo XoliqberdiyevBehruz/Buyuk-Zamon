@@ -33,11 +33,21 @@ class User(BaseModel, AbstractUser):
         return self.phone_number
     
 
-
-
 class Employee(User):
     position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='employees')
+    salary = models.PositiveBigIntegerField(default=0)
+    date_of_joined = models.DateField(null=True, blank=True)
+    paid = models.PositiveBigIntegerField(default=0)
+    indebtedness = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):
         return self.full_name
     
+
+class EmployeeSalary(BaseModel):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='salaries')
+    salary = models.PositiveBigIntegerField(null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.employee.full_name} - {self.salary}"

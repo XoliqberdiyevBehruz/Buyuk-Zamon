@@ -15,6 +15,8 @@ class EmployeeCreateSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     phone_number = serializers.CharField()
     position_id = serializers.IntegerField()
+    salary = serializers.IntegerField()
+    date_of_joined = serializers.DateField()
 
     def validate(self, data):
         try:
@@ -29,7 +31,9 @@ class EmployeeCreateSerializer(serializers.Serializer):
             employee = models.Employee.objects.create(
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
-                position=validated_data['position']
+                position=validated_data['position'],
+                salary=validated_data.get('salary', 0),
+                date_of_joined=validated_data.get('date_of_joined')
             )
             return employee
         return None
@@ -40,7 +44,7 @@ class EmployeeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
 
 
 class EmployeeDetailSerializer(serializers.ModelSerializer):
@@ -48,17 +52,54 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
 
 
 
 class EmployeeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        fields = [ 'full_name', 'phone_number', 'position']
+        fields = ['full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
         extra_kwargs = {
             'full_name': {'required': False},
             'phone_number': {'required': False},
             'position': {'required': False},
+            'salary': {'required': False},
+            'paid': {'required': False},
+            'indebtedness': {'required': False},
+            'date_of_joined': {'required': False}
         }
 
+
+class EmployeeSalaryCreateSerializer(serializers.Serializer):
+    employee = serializers.IntegerField()
+    salary = serializers.IntegerField()
+    date = serializers.DateField()
+
+    def validate(self, data):
+        try:
+            employee = models.Employee.objects.get(id=data['employee'])
+        except models.Employee.DoesNotExist:
+            raise serializers.ValidationError("Employee does not exist")
+        data['employee'] = employee
+        return data
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            salary = models.Salary.objects.create(
+                employee=validated_data['employee'],
+                salary=validated_data['salary'],
+                date=validated_data['date']
+            )
+            return salary
+        return None
+    
+
+class EmployeeDashboardSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Employee
+        fields = [
+            'id', 'full_name',  'salary', 'paid', 'indebtedness'
+        ]
+
+    

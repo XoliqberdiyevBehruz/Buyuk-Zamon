@@ -39,6 +39,7 @@ INSTALLED_APPS = [
 
     'account',
     'student',
+    'finance',
 ]
 
 MIDDLEWARE = [
@@ -142,7 +143,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS': 'account.employee.pagination.CustomPagination',
     'PAGE_SIZE': 10
 }
 
