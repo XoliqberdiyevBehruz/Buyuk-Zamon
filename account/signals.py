@@ -8,7 +8,10 @@ from finance.models import Expence, ExpenceCategory
 @receiver(post_save, sender=EmployeeSalary)
 def update_employee_paid_indebtedness(sender, instance, created, **kwargs):
     instance.employee.paid += instance.salary
-    instance.employee.indebtedness = instance.employee.salary - instance.employee.paid
+    if instance.employee.indebtedness > 0:
+        instance.employee.indebtedness = instance.employee.salary - instance.employee.paid
+    else:
+        instance.employee.indebtedness = 0
     instance.employee.save()
 
 @receiver(pre_delete, sender=EmployeeSalary)
