@@ -4,7 +4,7 @@ from account.models import BaseModel
 
 
 class ExpenceCategory(BaseModel):
-    name = models.CharField(max_length=250)
+    name = models.CharField(max_length=250, unique=True)
 
     def __str__(self):
         return self.name

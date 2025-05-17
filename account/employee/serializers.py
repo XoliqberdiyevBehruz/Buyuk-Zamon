@@ -92,13 +92,13 @@ class EmployeeSalaryCreateSerializer(serializers.Serializer):
                 salary=validated_data['salary'],
                 date=validated_data['date']
             )
-            Expence.objects.create(
-                name=salary.employee.full_name,
-                category=ExpenceCategory.objects.get_or_create(name='oylik maosh'),
-                date=salary.date,
-                price=salary.salary,
-                description=f'{salary.employee.full_name} oylik berildi' 
-            )            
+            # Expence.objects.create(
+            #     name=salary.employee.full_name,
+            #     category=ExpenceCategory.objects.get_or_create(name='oylik maosh'),
+            #     date=salary.date,
+            #     price=salary.salary,
+            #     description=f'{salary.employee.full_name} oylik berildi' 
+            # )            
             return salary
         return None
     
