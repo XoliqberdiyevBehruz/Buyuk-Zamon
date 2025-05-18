@@ -73,6 +73,12 @@ class ExpenceStatisticApiView(views.APIView):
         
         elif period == 'current_month':
             queryset = queryset.filter(date__month=now.month)
+
+        elif period == 'current_year':
+            queryset = queryset.filter(date__year=now.year)
+
+        elif period == 'current_week':
+            queryset = queryset.filter(date__range=(now - timedelta(days=7), now))
         
         expence = queryset.aggregate(sum=Sum('price'))['sum'] or 0
         return Response({

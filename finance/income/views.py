@@ -35,6 +35,13 @@ class IncomeStatisticApiView(views.APIView):
         elif prediot == 'current_month':
             queryset = queryset.filter(payment_time__month=now.month)
 
+        elif prediot == 'current_year':
+            queryset = queryset.filter(payment_time__year=now.year)
+
+        elif prediot == 'current_week':
+            queryset = queryset.filter(payment_time__range=(now - timedelta(days=7), now))
+
+
         income = queryset.aggregate(
             sum=Sum('price')
         )['sum']
