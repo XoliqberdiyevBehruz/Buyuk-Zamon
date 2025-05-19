@@ -21,6 +21,7 @@ class Student(BaseModel):
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True)
     student_id_time = models.DateField(null=True, blank=True)
+    student_id = models.PositiveBigIntegerField(null=True, blank=True)
 
     contract_number = models.CharField(max_length=250, null=True, blank=True)
     course_price = models.PositiveBigIntegerField()
