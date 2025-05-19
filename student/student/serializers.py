@@ -15,7 +15,7 @@ class StudentListSerializer(serializers.ModelSerializer):
         model = models.Student
         fields = [
             'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
-            'group_joined', 'status', 'payment', 'employee', 'student_id'
+            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number'
         ]
 
     def get_payment(self, obj):
