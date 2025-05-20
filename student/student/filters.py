@@ -38,6 +38,6 @@ class StudentFilter(django_filters.FilterSet):
             Q(full_name__icontains=value) |
             Q(phone_number__icontains=value) |
             Q(contract_number__icontains=value) |
-            Q(card_number__icontains=value)
+            Q(student_id__icontains=value)
         )
     
