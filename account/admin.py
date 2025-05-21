@@ -16,7 +16,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     list_filter = ('is_staff', 'is_active')
     fieldsets = (
         (None, {"fields": ("phone_number", "password")}),
-        ("Personal info", {"fields": ("full_name", "position", 'salary', 'date_of_joined', 'paid', 'indebtedness')}),
+        ("Personal info", {"fields": ("full_name", "position", 'date_of_joined', 'paid',)}),
         (
             "Permissions",
             {

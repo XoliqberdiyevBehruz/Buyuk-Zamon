@@ -18,6 +18,21 @@ class Student(BaseModel):
         ('completed', 'completed'),
     )
 
+    MONTH = (
+        ('yanvar', 'yanvar'),
+        ('fevral', 'fevral'),
+        ('mart', 'mart'),
+        ('aprel', 'aprel'),
+        ('may', 'may'),
+        ('iyun', 'iyun'),
+        ('iyul', 'iyul'),
+        ('avgust', 'avgust'),
+        ('sentabr', 'sentabr'),
+        ('oktabr', 'oktabr'),
+        ('noyabr', 'noyabr'),
+        ('dekabr', 'dekabr')
+    )
+
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True)
     student_id_time = models.DateField(null=True, blank=True)
@@ -35,6 +50,7 @@ class Student(BaseModel):
     telegram_link = models.CharField(max_length=200, null=True, blank=True)
     group_joined = models.BooleanField(default=False)
     suprice = models.BooleanField(default=False)
+    month = models.CharField(choices=MONTH, max_length=50, default='aprel')
 
     employee = models.ForeignKey('account.Employee', on_delete=models.SET_NULL, null=True,related_name='students')
 

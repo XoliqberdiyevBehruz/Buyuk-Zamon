@@ -16,7 +16,6 @@ class EmployeeCreateSerializer(serializers.Serializer):
     full_name = serializers.CharField()
     phone_number = serializers.CharField()
     position_id = serializers.IntegerField()
-    salary = serializers.IntegerField()
     date_of_joined = serializers.DateField()
 
     def validate(self, data):
@@ -33,7 +32,6 @@ class EmployeeCreateSerializer(serializers.Serializer):
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
                 position=validated_data['position'],
-                salary=validated_data.get('salary', 0),
                 date_of_joined=validated_data.get('date_of_joined')
             )
             return employee
@@ -42,10 +40,15 @@ class EmployeeCreateSerializer(serializers.Serializer):
 
 class EmployeeListSerializer(serializers.ModelSerializer):
     position = PositionSerializer()
+    paid = serializers.SerializerMethodField(method_name='get_employee_salary')
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
+
+    def get_employee_salary(self, obj):
+        salary = models.EmployeeSalary.objects.filter(employee=obj).last()
+        return salary.salary if salary else 0 
 
 
 class EmployeeDetailSerializer(serializers.ModelSerializer):
@@ -53,21 +56,19 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
 
 
 
 class EmployeeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        fields = ['full_name', 'phone_number', 'position', 'salary', 'paid', 'indebtedness', 'date_of_joined']
+        fields = ['full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
         extra_kwargs = {
             'full_name': {'required': False},
             'phone_number': {'required': False},
             'position': {'required': False},
-            'salary': {'required': False},
             'paid': {'required': False},
-            'indebtedness': {'required': False},
             'date_of_joined': {'required': False}
         }
 
@@ -91,14 +92,7 @@ class EmployeeSalaryCreateSerializer(serializers.Serializer):
                 employee=validated_data['employee'],
                 salary=validated_data['salary'],
                 date=validated_data['date']
-            )
-            # Expence.objects.create(
-            #     name=salary.employee.full_name,
-            #     category=ExpenceCategory.objects.get_or_create(name='oylik maosh'),
-            #     date=salary.date,
-            #     price=salary.salary,
-            #     description=f'{salary.employee.full_name} oylik berildi' 
-            # )            
+            )       
             return salary
         return None
     
@@ -107,7 +101,7 @@ class EmployeeDashboardSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
         fields = [
-            'id', 'full_name',  'salary', 'paid', 'indebtedness'
+            'id', 'full_name', 'paid'
         ]
 
     

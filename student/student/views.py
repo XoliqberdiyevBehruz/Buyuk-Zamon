@@ -1,4 +1,6 @@
-from rest_framework import generics, status, parsers, permissions
+from django.db.models import Sum
+
+from rest_framework import generics, status, parsers, permissions, views
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
@@ -50,3 +52,23 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
     
     def perform_update(self, serializer):
         serializer.save()
+
+
+class StudentsStatisticsApiView(views.APIView):
+    def get(self, request):
+        total_price = models.Student.objects.aggregate(total_price=Sum('course_price'))['total_price']
+        total_paid_price = models.Student.objects.aggregate(total_paid_price=Sum('paid'))['total_paid_price']
+        total_indebtedness_price = models.Student.objects.aggregate(total_indebtedness_price=Sum('debt'))['total_indebtedness_price']
+        indebtedness_students_count = models.Student.objects.filter(is_debt=True).count()
+        paid_students_count = models.Student.objects.filter(is_debt=False).count()
+
+        return Response(
+            {
+                'total_price': total_price,
+                'total_paid': total_paid_price,
+                'total_indebtedness': total_indebtedness_price,
+                'indebtedness_students_count': indebtedness_students_count,
+                'paid_students_count': paid_students_count,
+            }
+        )
+    

@@ -9,11 +9,12 @@ class StudentFilter(django_filters.FilterSet):
     is_debt = django_filters.BooleanFilter(method='filter_is_debt')
     a_to_z = django_filters.BooleanFilter(method='filter_a_to_z')
     search = django_filters.CharFilter(method='filter_search')
+    month = django_filters.CharFilter(field_name='month')
 
     class Meta:
         model = models.Student
         fields = [
-            'is_debt', 'a_to_z', 'search'
+            'is_debt', 'a_to_z', 'search', 'month'
         ]
 
     def filter_is_debt(self, queryset, name, value):

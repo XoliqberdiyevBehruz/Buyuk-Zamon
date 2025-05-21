@@ -35,10 +35,8 @@ class User(BaseModel, AbstractUser):
 
 class Employee(User):
     position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='employees')
-    salary = models.PositiveBigIntegerField(default=0)
     date_of_joined = models.DateField(null=True, blank=True)
     paid = models.PositiveBigIntegerField(default=0)
-    indebtedness = models.PositiveBigIntegerField(default=0)
 
     def __str__(self):
         return self.full_name

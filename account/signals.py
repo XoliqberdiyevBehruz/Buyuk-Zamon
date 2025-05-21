@@ -6,26 +6,11 @@ from finance.models import Expence, ExpenceCategory
 
 
 @receiver(post_save, sender=EmployeeSalary)
-def update_employee_paid_indebtedness(sender, instance, created, **kwargs):
-    instance.employee.paid += instance.salary
-    if instance.employee.indebtedness > 0:
-        instance.employee.indebtedness = instance.employee.salary - instance.employee.paid
-    else:
-        instance.employee.indebtedness = 0
-    instance.employee.save()
-
-@receiver(pre_delete, sender=EmployeeSalary)
-def update_employee_paid_indebtedness_on_delete(sender, instance, **kwargs):
-    instance.employee.paid -= instance.salary
-    instance.employee.indebtedness = instance.employee.salary - instance.employee.paid
-    instance.employee.save()
-
-@receiver(post_save, sender=EmployeeSalary)
 def create_expence(sender, instance, created, **kwargs):
     if created:
         Expence.objects.create(
                 name=instance.employee.full_name,
-                category=ExpenceCategory.objects.get_or_create(name='oylik maosh')[0],
+                category=ExpenceCategory.objects.get_or_create(name='Hodim oyligi')[0],
                 date=instance.date,
                 price=instance.salary,
                 description=f'{instance.employee.full_name} oylik berildi' 

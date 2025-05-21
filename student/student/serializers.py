@@ -15,7 +15,7 @@ class StudentListSerializer(serializers.ModelSerializer):
         model = models.Student
         fields = [
             'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
-            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number'
+            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number', 'suprice'
         ]
 
     def get_payment(self, obj):
@@ -35,7 +35,7 @@ class StudentAddSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'full_name', 'phone_number', 'contract_number', 'tariff', 'course_price', 'student_id_time', 'employee', 'student_id'
+            'full_name', 'phone_number', 'contract_number', 'tariff', 'course_price', 'student_id_time', 'employee', 'student_id', 'month'
         ]
 
     # def validate(self, data):
@@ -59,7 +59,8 @@ class StudentAddSerializer(serializers.ModelSerializer):
                 paid=0,
                 student_id_time=validated_data.get('student_id_time', None),
                 employee=validated_data.get('employee'),
-                student_id=validated_data.get('student_id')
+                student_id=validated_data.get('student_id'),
+                month=validated_data.get('month'),
             )
             return student
         
@@ -68,5 +69,5 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice'
         ]
