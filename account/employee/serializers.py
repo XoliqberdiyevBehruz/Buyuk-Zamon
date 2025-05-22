@@ -1,4 +1,6 @@
 from django.db import transaction  
+from django.db.models import Sum
+from django.utils import timezone
 
 from rest_framework import serializers
 
@@ -47,8 +49,8 @@ class EmployeeListSerializer(serializers.ModelSerializer):
         fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
 
     def get_employee_salary(self, obj):
-        salary = models.EmployeeSalary.objects.filter(employee=obj).last()
-        return salary.salary if salary else 0 
+        employee_salary = models.EmployeeSalary.objects.filter(employee=obj, date__month=timezone.now().month)
+        return employee_salary.aggregate(paid=Sum('salary'))['paid'] if employee_salary.aggregate(paid=Sum('salary'))['paid'] else 0
 
 
 class EmployeeDetailSerializer(serializers.ModelSerializer):
