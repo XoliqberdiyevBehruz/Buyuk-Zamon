@@ -57,10 +57,10 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
 class StudentsStatisticsApiView(views.APIView):
     def get(self, request):
         query_param = request.query_params.get('month')
-        print(query_param)
-        # if query_param in models.Student.MONTH:
-        queryset = models.Student.objects.filter(month=query_param)
-
+        queryset = models.Student.objects.all()        
+        if query_param:
+            queryset = queryset.filter(month=query_param)
+            
         total_price = queryset.aggregate(total_price=Sum('course_price'))['total_price']
         total_paid_price = queryset.aggregate(total_paid_price=Sum('paid'))['total_paid_price']
         total_indebtedness_price = queryset.aggregate(total_indebtedness_price=Sum('debt'))['total_indebtedness_price']
