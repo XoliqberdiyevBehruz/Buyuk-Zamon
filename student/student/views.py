@@ -56,19 +56,25 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
 
 class StudentsStatisticsApiView(views.APIView):
     def get(self, request):
-        total_price = models.Student.objects.aggregate(total_price=Sum('course_price'))['total_price']
-        total_paid_price = models.Student.objects.aggregate(total_paid_price=Sum('paid'))['total_paid_price']
-        total_indebtedness_price = models.Student.objects.aggregate(total_indebtedness_price=Sum('debt'))['total_indebtedness_price']
-        indebtedness_students_count = models.Student.objects.filter(is_debt=True).count()
-        paid_students_count = models.Student.objects.filter(is_debt=False).count()
+        query_param = request.query_params.get('month')
+        
+        if query_param in models.Student.MONTH:
+            queryset = models.Student.objects.filter(month=query_param)
 
-        return Response(
-            {
-                'total_price': total_price,
-                'total_paid': total_paid_price,
-                'total_indebtedness': total_indebtedness_price,
-                'indebtedness_students_count': indebtedness_students_count,
-                'paid_students_count': paid_students_count,
-            }
-        )
-    
+            total_price = queryset.aggregate(total_price=Sum('course_price'))['total_price']
+            total_paid_price = queryset.aggregate(total_paid_price=Sum('paid'))['total_paid_price']
+            total_indebtedness_price = queryset.aggregate(total_indebtedness_price=Sum('debt'))['total_indebtedness_price']
+            indebtedness_students_count = queryset.filter(is_debt=True).count()
+            paid_students_count = queryset.filter(is_debt=False).count()
+
+            return Response(
+                {
+                    'total_price': total_price,
+                    'total_paid': total_paid_price,
+                    'total_indebtedness': total_indebtedness_price,
+                    'indebtedness_students_count': indebtedness_students_count,
+                    'paid_students_count': paid_students_count,
+                }
+            )
+        else:
+            return Response({"error_message": "month not found"})
