@@ -1,7 +1,9 @@
 from rest_framework import generics, views, permissions, status, parsers
 from rest_framework.response import Response
 
-from account.employee import serializers, pagination
+from django_filters.rest_framework.backends import DjangoFilterBackend
+
+from account.employee import serializers, pagination, filters
 from account import models
 
 
@@ -16,6 +18,8 @@ class EmployeeListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     queryset = models.Employee.objects.all()
     pagination_class = pagination.CustomPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.EmployeeFilter
 
 
 class EmployeeDetailView(generics.RetrieveDestroyAPIView):
@@ -48,3 +52,14 @@ class EmployeeSalarCreateyApiView(generics.CreateAPIView):
     serializer_class = serializers.EmployeeSalaryCreateSerializer
     permission_classes = (permissions.IsAuthenticated,)
     queryset = models.EmployeeSalary.objects.all()
+
+
+class EmployeeSalaryListApiView(generics.GenericAPIView):
+    serializer_class = serializers.EmployeeSalarySerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    queryset = models.EmployeeSalary.objects.order_by('-date')
+
+    def get(self, request, employee_id):
+        employee_salary = self.queryset.filter(employee__id=employee_id)
+        serializer = self.get_serializer(employee_salary, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

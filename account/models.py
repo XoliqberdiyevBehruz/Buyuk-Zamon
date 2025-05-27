@@ -37,9 +37,18 @@ class Employee(User):
     position = models.ForeignKey(Position, on_delete=models.CASCADE, related_name='employees')
     date_of_joined = models.DateField(null=True, blank=True)
     paid = models.PositiveBigIntegerField(default=0)
+    date_of_left = models.DateField(null=True, blank=True)
+    is_left = models.BooleanField(default=False)
 
     def __str__(self):
         return self.full_name
+    
+    def save(self, *args, **kwargs):
+        if self.date_of_left is not None:
+            self.is_left = True
+        else:
+            self.is_left = False
+        super().save(*args, **kwargs)
     
 
 class EmployeeSalary(BaseModel):

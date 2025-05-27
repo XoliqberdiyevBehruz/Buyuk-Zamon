@@ -46,7 +46,7 @@ class EmployeeListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined', 'date_of_left', 'is_left']
 
     def get_employee_salary(self, obj):
         employee_salary = models.EmployeeSalary.objects.filter(employee=obj, date__month=timezone.now().month)
@@ -58,20 +58,21 @@ class EmployeeDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Employee
-        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
+        fields = ['id', 'full_name', 'phone_number', 'position', 'paid', 'date_of_joined', 'date_of_left', 'is_left']
 
 
 
 class EmployeeUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Employee
-        fields = ['full_name', 'phone_number', 'position', 'paid', 'date_of_joined']
+        fields = ['full_name', 'phone_number', 'position', 'paid', 'date_of_joined', 'date_of_left']
         extra_kwargs = {
             'full_name': {'required': False},
             'phone_number': {'required': False},
             'position': {'required': False},
             'paid': {'required': False},
-            'date_of_joined': {'required': False}
+            'date_of_joined': {'required': False},
+            'date_of_left': {'required': False},
         }
 
 
@@ -106,4 +107,10 @@ class EmployeeDashboardSerializer(serializers.ModelSerializer):
             'id', 'full_name', 'paid'
         ]
 
-    
+
+class EmployeeSalarySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.EmployeeSalary
+        fields = [
+            'id', 'salary', 'date'
+        ]

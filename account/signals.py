@@ -15,4 +15,3 @@ def create_expence(sender, instance, created, **kwargs):
                 price=instance.salary,
                 description=f'{instance.employee.full_name} oylik berildi' 
             )   
-     
