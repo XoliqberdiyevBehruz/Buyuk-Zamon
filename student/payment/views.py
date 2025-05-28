@@ -1,20 +1,21 @@
-from rest_framework import generics, status, permissions, parsers
+from rest_framework import generics, status, parsers
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
 from student import models 
 from student.payment import serializers
+from account import permissions
 
 
 class PaymentAddApiView(generics.CreateAPIView):
     serializer_class = serializers.PaymentAddSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Payment.objects.all()
 
 
 class PaymentListApiView(generics.GenericAPIView):
     serializer_class = serializers.PaymentListSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
 
     def get(self, request, student_id):
         payments = models.Payment.objects.filter(user__id=student_id).order_by('-created_at')
@@ -25,7 +26,7 @@ class PaymentListApiView(generics.GenericAPIView):
 
 class PaymentUpdateApiView(generics.GenericAPIView):
     serializer_class = serializers.PaymentUpdateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
 
     def put(self, request, payment_id):
         try:
@@ -42,12 +43,12 @@ class PaymentUpdateApiView(generics.GenericAPIView):
 
 class PaymentDeleteApiView(generics.DestroyAPIView):
     queryset = models.Payment.objects.all()
-    permission_classes = [permissions.IsAuthenticated,]
+    permission_classes = [permissions.IsBossOrEmployee,]
     lookup_field = 'id'
 
 
 class PaymentImagesCreateApiView(generics.CreateAPIView):
     serializer_class = serializers.PaymentImagesCreateSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.PaymentImage.objects.all()
     parser_classes = [parsers.FormParser, parsers.MultiPartParser]

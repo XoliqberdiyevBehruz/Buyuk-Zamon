@@ -4,31 +4,31 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.db.models.functions import ExtractYear, ExtractMonth
 
-from rest_framework import generics, permissions, views, status
+from rest_framework import generics, views
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from finance import models
 from finance.expence import serializers, filters
-
+from account import permissions
 
 class ExpenceCategoryListApiView(generics.ListAPIView):
     serializer_class = serializers.ExpenceCategoryListSerializer
     queryset = models.ExpenceCategory.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
 
 
 class ExpenceCreateApiView(generics.CreateAPIView):
     serializer_class = serializers.ExpenceAddSerializer
     queryset = models.Expence.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
 
 
 class ExpenceListApiView(generics.ListAPIView):
     serializer_class = serializers.ExpenceListSerializer
     queryset = models.Expence.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.ExpenceFilter
 
@@ -36,18 +36,18 @@ class ExpenceListApiView(generics.ListAPIView):
 class ExpenceUpdateApiView(generics.UpdateAPIView):
     serializer_class = serializers.ExpenceUpdateSerializer
     queryset = models.Expence.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
     lookup_field = 'id'
 
 
 class ExpenceDeleteApiView(generics.DestroyAPIView):
     queryset = models.Expence.objects.all()
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
     lookup_field = 'id'
 
 
 class ExpenceStatisticApiView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
 
     def get(self, request):
         now = timezone.now()
@@ -87,7 +87,7 @@ class ExpenceStatisticApiView(views.APIView):
     
 
 class ExpenceMonthlyStatisticApiView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
 
     def get(self, request):
         data = (
@@ -113,7 +113,7 @@ class ExpenceMonthlyStatisticApiView(views.APIView):
     
 
 class ExpenceCategoryStatisticApiView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsBoss, )
 
     def get(self, request):
         all_sum = models.Expence.objects.aggregate(total=Sum('price'))['total'] or 0

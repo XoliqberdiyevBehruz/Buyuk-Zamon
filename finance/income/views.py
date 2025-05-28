@@ -4,14 +4,15 @@ from django.utils import timezone
 from django.db.models import Sum
 from django.db.models.functions import ExtractYear, ExtractMonth
 
-from rest_framework import generics, permissions, views
+from rest_framework import views
 from rest_framework.response import Response
 
 from student import models 
+from account import permissions
 
 
 class IncomeStatisticApiView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsBoss,)
 
     def get(self, request):
         now = timezone.now()
@@ -52,7 +53,7 @@ class IncomeStatisticApiView(views.APIView):
     
 
 class IncomeMonthlyStatisticApiView(views.APIView):
-    permission_classes = (permissions.IsAuthenticated, )
+    permission_classes = (permissions.IsBoss, )
 
     def get(self, request):
         now = timezone.now()

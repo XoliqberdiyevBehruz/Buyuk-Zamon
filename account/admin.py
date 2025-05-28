@@ -5,7 +5,7 @@ from django.contrib.auth.models import Group
 from account import models 
 
 @admin.register(models.User)
-class UserAdmin(Admin):
+class UserAdmin(admin.ModelAdmin):
     list_display = ('id','full_name', 'phone_number', 'is_staff')
     list_filter = ('is_staff', 'is_active')
     ordering = ('id',)
@@ -14,20 +14,6 @@ class UserAdmin(Admin):
 class EmployeeAdmin(admin.ModelAdmin):
     list_display = ('id', 'full_name', 'phone_number', 'position', 'is_staff')
     list_filter = ('is_staff', 'is_active')
-    fieldsets = (
-        (None, {"fields": ("phone_number", "password")}),
-        ("Personal info", {"fields": ("full_name", "position", 'date_of_joined', 'paid', 'date_of_left', 'is_left')}),
-        (
-            "Permissions",
-            {
-                "fields": (
-                    "is_active",
-                    "is_staff",
-                    "is_superuser",
-                ),
-            },
-        ),
-    )
 
 
 @admin.register(models.Position)

@@ -1,17 +1,19 @@
 from django.db.models import Sum
 
-from rest_framework import generics, status, parsers, permissions, views
+from rest_framework import generics, status, parsers, views
 from rest_framework.response import Response
 
 from django_filters.rest_framework import DjangoFilterBackend
 
 from student.student import serializers, filters
 from student import models 
+from account import permissions
+
 
 class StudentListApiView(generics.ListAPIView):
     queryset = models.Student.objects.order_by('-created_at').select_related('employee')
     serializer_class = serializers.StudentListSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.StudentFilter
 
@@ -19,14 +21,14 @@ class StudentListApiView(generics.ListAPIView):
 class StudentAddApiView(generics.CreateAPIView):
     serializer_class = serializers.StudentAddSerializer
     queryset = models.Student
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
     parser_classes = [parsers.FormParser, parsers.MultiPartParser]
 
 
 class StudentApiView(generics.RetrieveUpdateAPIView):
     serializer_class = serializers.StudentDetailSerializer
     queryset = models.Student
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsBossOrEmployee]
     lookup_field = 'id'
 
     def update(self, request, *args, **kwargs):
@@ -55,6 +57,8 @@ class StudentApiView(generics.RetrieveUpdateAPIView):
 
 
 class StudentsStatisticsApiView(views.APIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+
     def get(self, request):
         query_param = request.query_params.get('month')
         queryset = models.Student.objects.all()        
@@ -76,5 +80,3 @@ class StudentsStatisticsApiView(views.APIView):
                 'paid_students_count': paid_students_count,
             }
         )
-        # else:
-            # return Response({"error_message": "month not found"})

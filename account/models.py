@@ -19,11 +19,17 @@ class Position(models.Model):
 
 
 class User(BaseModel, AbstractUser):
+    ROLE = (
+        ('boss', 'boss'),
+        ('employee', 'employee'),
+    )
+
     full_name = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=15, unique=True)
     username = None
     first_name = None
     last_name = None
+    role = models.CharField(max_length=250, choices=ROLE, default='employee')
     
     objects = CustomUserManager()
 
