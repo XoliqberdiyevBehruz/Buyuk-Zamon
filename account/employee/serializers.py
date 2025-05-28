@@ -1,6 +1,7 @@
 from django.db import transaction  
 from django.db.models import Sum
 from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 
 from rest_framework import serializers
 
@@ -19,6 +20,7 @@ class EmployeeCreateSerializer(serializers.Serializer):
     phone_number = serializers.CharField()
     position_id = serializers.IntegerField()
     date_of_joined = serializers.DateField()
+    password = serializers.CharField(write_only=True)
 
     def validate(self, data):
         try:
@@ -34,7 +36,8 @@ class EmployeeCreateSerializer(serializers.Serializer):
                 full_name=validated_data['full_name'],
                 phone_number=validated_data['phone_number'],
                 position=validated_data['position'],
-                date_of_joined=validated_data.get('date_of_joined')
+                date_of_joined=validated_data.get('date_of_joined'),
+                password=make_password(validated_data.get('password'))
             )
             return employee
         return None
