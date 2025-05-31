@@ -10,4 +10,6 @@ urlpatterns = [
         path('bot/user/<int:id>/total_price/add/', views.UserTotalPriceUpdateApiView.as_view()),
         path('bot/user/<str:phone_number>/', views.StudentGetNumberApiView.as_view()),
         path('bot/user/<int:id>/join_group/', views.StudentJoinTelegramGroupApiView.as_view()),
+        path('bot/verify_user/', views.VerifyStudentApiView.as_view()),
+        path('bot/check_group_joined/<int:id>/', views.CheckGroupStudentApiView.as_view()),
 ]

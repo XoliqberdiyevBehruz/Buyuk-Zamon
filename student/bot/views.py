@@ -96,3 +96,40 @@ class StudentJoinTelegramGroupApiView(views.APIView):
         student.save()
         return Response({"message": "ok"}, status=status.HTTP_200_OK)
     
+
+class VerifyStudentApiView(views.APIView):
+    def get(self, request):
+        phone = request.query_params.get('phone')
+        phone_number = f'+{phone}' if phone.startswith('998') else f'+998{phone}'  
+        full_name = request.query_params.get('full_name')
+        contract_number = request.query_params.get('contract_number')
+
+        if phone and full_name and contract_number:
+            student = models.Student.objects.filter(phone_number=phone_number, contract_number=contract_number, full_name=full_name).first()
+            if student:
+                return Response(
+                    {
+                        'id': student.id,
+                        'status': student.status
+                    }
+                )
+            else:
+                return Response({"message": "student not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({'message':'query params is required!'}, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class CheckGroupStudentApiView(views.APIView):
+    def get(self, request, id):
+        try:
+            student = models.Student.objects.get(id=id)
+        except models.Student.DoesNotExist:
+            return Response({"message": "student not found"}, status=status.HTTP_404_NOT_FOUND)
+        joined = student.group_joined
+        if student.group_joined == False:
+            student.group_joined = True
+            student.save()
+        return Response({
+            'joined': joined
+        })
+    
