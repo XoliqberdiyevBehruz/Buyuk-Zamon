@@ -56,3 +56,26 @@ class UserGetSerializer(serializers.Serializer):
 
 class AddTotalPriceSerializer(serializers.Serializer):
     total_price = serializers.CharField()
+    
+
+class StudentDescriptionSerializer(serializers.Serializer):
+    student_id = serializers.IntegerField()
+    description = serializers.CharField()
+
+    def validate(self, data):
+        try:
+            student = models.Student.objects.get(id=data.get('student_id'))
+        except models.Student.DoesNotExist:
+            raise serializers.ValidationError("student not found")
+        data['student'] = student
+        return data
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            student_description = models.StudentDescription.objects.create(
+                student=validated_data.get('student'),
+                description=validated_data.get('description'),
+            )
+            return student_description
+        return None
+    

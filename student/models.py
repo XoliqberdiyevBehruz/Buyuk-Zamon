@@ -111,3 +111,12 @@ class PaymentImage(BaseModel):
 
     def __str__(self):
         return str(self.image)
+
+
+class StudentDescription(BaseModel):
+    student = models.ForeignKey(Student, related_name='descriptions', on_delete=models.CASCADE)
+    description = models.TextField()
+
+    def __str__(self):
+        return f'{self.student.full_name} - {self.description[:10]}...'
+    

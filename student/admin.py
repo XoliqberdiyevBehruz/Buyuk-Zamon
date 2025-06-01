@@ -17,3 +17,8 @@ class PaymentImageInline(admin.TabularInline):
 class PaymentAdmin(admin.ModelAdmin):
     list_display = ['id', 'price', 'payment_time', 'type']
     inlines = [PaymentImageInline]
+
+
+@admin.register(models.StudentDescription)
+class StudentDescriptionAdmin(admin.ModelAdmin):
+    pass

@@ -132,4 +132,15 @@ class CheckGroupStudentApiView(views.APIView):
         return Response({
             'joined': joined
         })
-    
+
+
+class StudentDescriptionCreate(generics.GenericAPIView):
+    serializer_class = serializers.StudentDescriptionSerializer
+    queryset = models.StudentDescription.objects.all()
+
+    def post(self, request):
+        serializer = serializers.StudentDescriptionSerializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({"message": "created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

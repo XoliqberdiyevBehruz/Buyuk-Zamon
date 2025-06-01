@@ -12,4 +12,5 @@ urlpatterns = [
         path('bot/user/<int:id>/join_group/', views.StudentJoinTelegramGroupApiView.as_view()),
         path('bot/verify_user/', views.VerifyStudentApiView.as_view()),
         path('bot/check_group_joined/<int:id>/', views.CheckGroupStudentApiView.as_view()),
+        path('bot/verification_failed/', views.StudentDescriptionCreate.as_view()),
 ]
