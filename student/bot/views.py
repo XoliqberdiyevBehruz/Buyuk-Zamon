@@ -136,7 +136,7 @@ class CheckGroupStudentApiView(views.APIView):
 
 class StudentDescriptionCreate(generics.GenericAPIView):
     serializer_class = serializers.StudentDescriptionSerializer
-    queryset = models.StudentDescription.objects.all()
+    queryset = models.Notification.objects.all()
 
     def post(self, request):
         serializer = serializers.StudentDescriptionSerializer(data=request.data)

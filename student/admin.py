@@ -19,6 +19,6 @@ class PaymentAdmin(admin.ModelAdmin):
     inlines = [PaymentImageInline]
 
 
-@admin.register(models.StudentDescription)
+@admin.register(models.Notification)
 class StudentDescriptionAdmin(admin.ModelAdmin):
     pass
