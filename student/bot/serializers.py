@@ -68,4 +68,3 @@ class StudentDescriptionSerializer(serializers.Serializer):
             )
             return student_description
         return None
-    

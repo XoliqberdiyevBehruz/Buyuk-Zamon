@@ -71,3 +71,11 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice'
         ]
+
+
+class NotificationListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Notification
+        fields = [
+            'id', 'description'
+        ]

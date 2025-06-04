@@ -80,3 +80,10 @@ class StudentsStatisticsApiView(views.APIView):
                 'paid_students_count': paid_students_count,
             }
         )
+
+
+class NotificationListApiView(generics.ListAPIView):
+    queryset = models.Notification.objects.all()
+    serializer_class = serializers.NotificationListSerializer
+    permission_classes = [permissions.IsBossOrEmployee]
+    

@@ -8,4 +8,5 @@ urlpatterns = [
     path('student/add/', views.StudentAddApiView.as_view()),
     path('student/<int:id>/', views.StudentApiView.as_view()),
     path('student/course_statistic/', views.StudentsStatisticsApiView.as_view()),
+    path('notification/list/', views.NotificationListApiView.as_view()),
 ]
