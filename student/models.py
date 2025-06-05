@@ -124,5 +124,5 @@ class Notification(BaseModel):
     description = models.TextField()
 
     def __str__(self):
-        return self.full_name
+        return self.full_name or self.description
     
