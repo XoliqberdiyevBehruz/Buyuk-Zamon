@@ -13,4 +13,5 @@ urlpatterns = [
         path('bot/verify_user/', views.VerifyStudentApiView.as_view()),
         path('bot/check_group_joined/<int:id>/', views.CheckGroupStudentApiView.as_view()),
         path('bot/verification_failed/', views.StudentDescriptionCreate.as_view()),
+        path('bot/get_user_by_id/<int:id>/', views.StudentGetByIdApiView.as_view()),
 ]

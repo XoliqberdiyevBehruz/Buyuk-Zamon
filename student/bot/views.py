@@ -144,3 +144,21 @@ class StudentDescriptionCreate(generics.GenericAPIView):
             serializer.save()
             return Response({"message": "created"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class StudentGetByIdApiView(views.APIView):
+    def get(self, request, id):
+        try:
+            student = models.Student.objects.get(id=id)
+        except models.Student.DoesNotExist:
+            return Response({"message": "student not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response({
+            "id": student.id,
+            "full_name": student.full_name,
+            "contract_number": student.contract_number,
+            "tariff": student.tariff,
+            "course_price": student.course_price,
+            "paid": student.paid,
+            "debt": student.debt
+        }, status=status.HTTP_200_OK)
