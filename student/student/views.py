@@ -6,8 +6,10 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 from student.student import serializers, filters
-from student import models 
+from student import models, tasks
 from account import permissions
+
+from django.conf import settings
 
 
 class StudentListApiView(generics.ListAPIView):
@@ -87,3 +89,16 @@ class NotificationListApiView(generics.ListAPIView):
     serializer_class = serializers.NotificationListSerializer
     permission_classes = [permissions.IsBossOrEmployee]
     
+
+class StudentSendMessageApiView(generics.GenericAPIView):
+    serializer_class = serializers.StudentSendMessageSerializer
+    queryset = models.Student.objects.all()
+    permission_classes = [permissions.IsBossOrEmployee]
+
+    def post(self, request):
+        serializer = serializers.StudentSendMessageSerializer(data=request.data)
+        if serializer.is_valid():
+            for id in serializer.data.get('ids'):
+                tasks.send_telegram_message.delay(settings.BOT_TOKEN, id, serializer.data.get('message'))
+            return Response({"message": "send"}, status=status.HTTP_200_OK)
+        return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)

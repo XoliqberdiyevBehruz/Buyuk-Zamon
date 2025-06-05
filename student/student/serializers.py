@@ -71,3 +71,8 @@ class NotificationListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'full_name', 'phone_number', 'contract_number', 'description'
         ]
+
+    
+class StudentSendMessageSerializer(serializers.Serializer):
+    ids = serializers.ListSerializer(child=serializers.CharField())
+    message = serializers.CharField()
