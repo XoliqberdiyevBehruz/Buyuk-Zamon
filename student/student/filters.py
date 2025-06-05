@@ -10,12 +10,21 @@ class StudentFilter(django_filters.FilterSet):
     a_to_z = django_filters.BooleanFilter(method='filter_a_to_z')
     search = django_filters.CharFilter(method='filter_search')
     month = django_filters.CharFilter(field_name='month')
+    status = django_filters.CharFilter(method='filter_status')
 
     class Meta:
         model = models.Student
         fields = [
-            'is_debt', 'a_to_z', 'search', 'month'
+            'is_debt', 'a_to_z', 'search', 'month', 'status'
         ]
+
+    def filter_status(self, queryset, name, value):
+        if value == "prepayment":
+            return queryset.filter(status="prepayment")
+        elif value == "partially":
+            return queryset.filter(status="partially")
+        else:
+            return queryset
 
     def filter_is_debt(self, queryset, name, value):
         if value == True:

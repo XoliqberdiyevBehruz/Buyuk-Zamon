@@ -60,11 +60,32 @@ class AddTotalPriceSerializer(serializers.Serializer):
 
 class StudentDescriptionSerializer(serializers.Serializer):
     description = serializers.CharField()
+    full_name = serializers.CharField()
+    phone_number = serializers.CharField()
+    contract_number = serializers.CharField()
 
     def create(self, validated_data):
         with transaction.atomic():
             student_description = models.Notification.objects.create(
                 description=validated_data.get('description'),
+                full_name=validated_data.get('full_name'),
+                phone_number=validated_data.get('phone_number'),
+                contract_number=validated_data.get('contract_number'),
             )
             return student_description
         return None
+
+
+class StudentUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Student
+        fields = [
+            'telegram_id', 'telegram_full_name', 'telegram_username'
+        ]
+
+    def update(self, instance, validated_data):
+        instance.telegram_id = validated_data.get('telegram_id')
+        instance.telegram_full_name = validated_data.get('telegram_full_name')
+        instance.telegram_username = validated_data.get('telegram_username')
+        instance.save()
+        return instance

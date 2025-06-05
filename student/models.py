@@ -54,6 +54,10 @@ class Student(BaseModel):
 
     employee = models.ForeignKey('account.Employee', on_delete=models.SET_NULL, null=True,related_name='students')
 
+    telegram_id = models.CharField(max_length=250, null=True, blank=True)
+    telegram_full_name = models.CharField(max_length=250, null=True, blank=True)
+    telegram_username = models.CharField(max_length=250, null=True, blank=True)
+
     def __str__(self):
         return self.full_name
     
@@ -114,8 +118,11 @@ class PaymentImage(BaseModel):
 
 
 class Notification(BaseModel):
+    full_name = models.CharField(max_length=250, null=True)
+    phone_number = models.CharField(max_length=250, null=True)
+    contract_number = models.CharField(max_length=250, null=True)
     description = models.TextField()
 
     def __str__(self):
-        return self.description[:10]
+        return self.full_name
     

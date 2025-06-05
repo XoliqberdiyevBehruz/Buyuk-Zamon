@@ -162,3 +162,10 @@ class StudentGetByIdApiView(views.APIView):
             "paid": student.paid,
             "debt": student.debt
         }, status=status.HTTP_200_OK)
+    
+
+class UpdateStudentApiView(generics.UpdateAPIView):
+    serializer_class = serializers.StudentUpdateSerializer
+    lookup_field = 'id'
+    queryset = models.Student.objects.all()
+    

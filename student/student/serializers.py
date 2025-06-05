@@ -15,7 +15,7 @@ class StudentListSerializer(serializers.ModelSerializer):
         model = models.Student
         fields = [
             'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
-            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number', 'suprice'
+            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number', 'suprice', 'telegram_id'
         ]
 
     def get_payment(self, obj):
@@ -37,14 +37,6 @@ class StudentAddSerializer(serializers.ModelSerializer):
         fields = [
             'full_name', 'phone_number', 'contract_number', 'tariff', 'course_price', 'student_id_time', 'employee', 'student_id', 'month'
         ]
-
-    # def validate(self, data):
-    #     try:
-    #         employee = Employee.objects.get(id=data['employee'])
-    #     except Employee.DoesNotExist:
-    #         raise serializers.ValidationError("Employee does not exist.")
-    #     data['employee'] = employee
-    #     return data
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -69,7 +61,7 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice', 'telegram_id', 'telegram_full_name', 'telegram_username'
         ]
 
 
@@ -77,5 +69,5 @@ class NotificationListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Notification
         fields = [
-            'id', 'description'
+            'id', 'full_name', 'phone_number', 'contract_number', 'description'
         ]
