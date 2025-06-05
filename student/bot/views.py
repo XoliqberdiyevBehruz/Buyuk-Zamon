@@ -100,12 +100,11 @@ class StudentJoinTelegramGroupApiView(views.APIView):
 class VerifyStudentApiView(views.APIView):
     def get(self, request):
         phone = request.query_params.get('phone')
-        phone_number = f'+{phone}' if phone.startswith('998') else f'+998{phone}'  
         full_name = request.query_params.get('full_name')
         contract_number = request.query_params.get('contract_number')
 
         if phone and full_name and contract_number:
-            student = models.Student.objects.filter(phone_number=phone_number, contract_number=contract_number, full_name=full_name).first()
+            student = models.Student.objects.filter(full_name=full_name,contract_number=contract_number,phone_number__icontains=phone).first()
             if student:
                 return Response(
                     {
