@@ -11,14 +11,16 @@ def send_telegram_message(token, id, text):
     except models.Student.DoesNotExist:
         return {"student not found"}
     
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    data = {
-        "chat_id": student.telegram_id,
-        "text": utils.format_text(text, student),
-    }
-    try:
-        response = requests.post(url, data=data)
-        response.raise_for_status()
-        return {"status": "success", "response": response.json()}
-    except requests.exceptions.RequestException as e:
-        return {"status": "error", "message": str(e)}
+    if student.telegram_id:
+        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        data = {
+            "chat_id": student.telegram_id,
+            "text": utils.format_text(text, student),
+        }
+        try:
+            response = requests.post(url, data=data)
+            response.raise_for_status()
+            return {"status": "success", "response": response.json()}
+        except requests.exceptions.RequestException as e:
+            return {"status": "error", "message": str(e)}
+    return {"status": "error", "message": "Telegram ID not set for student"}
