@@ -65,12 +65,15 @@ class Student(BaseModel):
         if self.paid < 3_000_000:
             self.status = 'prepayment'
             self.is_debt = True
+            self.group_joined = False
         elif self.paid > 3_000_000 and self.paid < self.course_price:
             self.status = 'partially'
             self.is_debt = True
+            self.group_joined = False
         elif self.paid >= self.course_price:
             self.status = 'completed'
             self.is_debt = False
+            self.group_joined = True
         return super().save(*args, **kwargs)
 
 

@@ -104,7 +104,7 @@ class VerifyStudentApiView(views.APIView):
         contract_number = request.query_params.get('contract_number')
 
         if phone and full_name and contract_number:
-            student = models.Student.objects.filter(full_name__icontains=full_name,contract_number=contract_number,phone_number__icontains=phone).first()
+            student = models.Student.objects.filter(full_name__iexact=full_name,contract_number=contract_number,phone_number__icontains=phone).first()
             if student:
                 return Response(
                     {
