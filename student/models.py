@@ -8,7 +8,7 @@ CASH, CREDIT, CARD = ('naqd', 'nasya', 'karta')
 
 class TelegramGroup(BaseModel):
     name = models.CharField(max_length=250)
-    group_id = models.BigIntegerField()
+    group_id = models.BigIntegerField(unique=True)
     
     def __str__(self):
         return f"{self.name} ---- {self.group_id}"
