@@ -105,3 +105,20 @@ class TelegramGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.TelegramGroup
         fields = ['id', 'name', 'group_id']
+
+    
+class StudentSetTelegramGroupSerializer(serializers.Serializer):
+    student_id = serializers.IntegerField()
+
+    def validate(self, attrs):
+        try:
+            student = models.Student.objects.get(id=attrs.get('student_id'))
+        except models.TelegramGroup.DoesNotExist:
+            raise serializers.ValidationError("not found")
+        attrs['student'] = student
+        return attrs
+
+    def update(self, instance, validated_data):
+        instance.students.set([validated_data.get('student')])
+        instance.save()
+        return instance

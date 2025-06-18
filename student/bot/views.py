@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import generics, status, parsers, views
 from rest_framework.response import Response
 
@@ -190,3 +192,15 @@ class StudentGroupInfoApiView(views.APIView):
             "start_date": group.start_date
         })
 
+
+class StudentSetTelegramGroupApiView(generics.GenericAPIView):
+    serializer_class = serializers.StudentSetTelegramGroupSerializer
+    queryset = models.TelegramGroup.objects.all()
+
+    def put(self, request, id):
+        student = get_object_or_404(models.TelegramGroup, group_id=id)
+        serializer = self.serializer_class(student, data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({"message": "add"}, status=200)
+        return Response(serializer.errors, status=400)

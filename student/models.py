@@ -9,6 +9,8 @@ CASH, CREDIT, CARD = ('naqd', 'nasya', 'karta')
 class TelegramGroup(BaseModel):
     name = models.CharField(max_length=250)
     group_id = models.BigIntegerField(unique=True)
+    students = models.ManyToManyField('Student', related_name='telegram_groups')
+
     
     def __str__(self):
         return f"{self.name} ---- {self.group_id}"
@@ -74,7 +76,8 @@ class Student(BaseModel):
 
     def __str__(self):
         return self.full_name
-    
+
+
     def save(self, *args, **kwargs):
         if self.paid < 3_000_000:
             self.status = 'prepayment'
