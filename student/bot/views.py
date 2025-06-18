@@ -180,3 +180,13 @@ class TelegramListApiView(generics.ListAPIView):
     queryset = models.TelegramGroup.objects.all()
     serializer_class = serializers.TelegramGroupSerializer
     pagination_class = None
+
+
+class StudentGroupInfoApiView(views.APIView):
+    def get(self, request):
+        group = models.StudentGroup.objects.order_by('created_at').last()
+        return Response({
+            "name": group.group_name,
+            "start_date": group.start_date
+        })
+

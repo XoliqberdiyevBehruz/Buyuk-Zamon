@@ -10,6 +10,7 @@ urlpatterns = [
         path('bot/student/<int:id>/update/', views.UpdateStudentApiView.as_view()),
         path('bot/telegram_group/create/', views.TelegramGroupCreateApiView.as_view()),
         path('bot/telegram_group/list/', views.TelegramListApiView.as_view()),
+        path('bot/student_group_info/', views.StudentGroupInfoApiView.as_view())
         # path('bot/user/get/', views.StudentGetPhoneNumberApiView.as_view()),
         # path('bot/user/<str:phone_number>/', views.StudentGetNumberApiView.as_view()),
         # path('bot/get_user_by_id/<int:id>/', views.StudentGetByIdApiView.as_view()),
