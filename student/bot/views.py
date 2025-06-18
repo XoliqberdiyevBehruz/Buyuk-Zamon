@@ -169,3 +169,14 @@ class UpdateStudentApiView(generics.UpdateAPIView):
     lookup_field = 'id'
     queryset = models.Student.objects.all()
     
+
+
+class TelegramGroupCreateApiView(generics.CreateAPIView):
+    serializer_class = serializers.TelegramGroupCreateSerializer
+    queryset = models.TelegramGroup.objects.all()
+
+
+class TelegramListApiView(generics.ListAPIView):
+    queryset = models.TelegramGroup.objects.all()
+    serializer_class = serializers.TelegramGroupSerializer
+    pagination_class = None

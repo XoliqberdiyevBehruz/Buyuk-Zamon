@@ -89,3 +89,19 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
         instance.telegram_username = validated_data.get('telegram_username')
         instance.save()
         return instance
+    
+
+class TelegramGroupCreateSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    group_id = serializers.IntegerField()
+
+    def create(self, validated_data):
+        with transaction.atomic():
+            telegram_group = models.TelegramGroup.objects.create(**validated_data)
+            return telegram_group
+    
+
+class TelegramGroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.TelegramGroup
+        fields = ['id', 'name', 'group_id']

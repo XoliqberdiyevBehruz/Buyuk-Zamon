@@ -27,3 +27,8 @@ class StudentDescriptionAdmin(admin.ModelAdmin):
 @admin.register(models.StudentGroup)
 class StudentGroupAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.TelegramGroup)
+class TelegramGroupAdmin(admin.ModelAdmin):
+    pass

@@ -6,6 +6,14 @@ PREMIUM, VIP, BUSINESS = ('premium', 'vip', 'biznes')
 CASH, CREDIT, CARD = ('naqd', 'nasya', 'karta')
 
 
+class TelegramGroup(BaseModel):
+    name = models.CharField(max_length=250)
+    group_id = models.BigIntegerField()
+    
+    def __str__(self):
+        return f"{self.name} ---- {self.group_id}"
+
+
 class Student(BaseModel):
     TARIFF = (
         (PREMIUM, PREMIUM),
