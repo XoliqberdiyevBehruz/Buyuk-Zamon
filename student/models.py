@@ -79,7 +79,7 @@ class Student(BaseModel):
         elif self.paid >= self.course_price:
             self.status = 'completed'
             self.is_debt = False
-            self.group_joined = True
+            self.group_joined = False
         return super().save(*args, **kwargs)
 
 
