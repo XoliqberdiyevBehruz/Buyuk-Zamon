@@ -22,3 +22,8 @@ class PaymentAdmin(admin.ModelAdmin):
 @admin.register(models.Notification)
 class StudentDescriptionAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.StudentGroup)
+class StudentGroupAdmin(admin.ModelAdmin):
+    pass

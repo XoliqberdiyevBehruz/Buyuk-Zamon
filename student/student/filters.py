@@ -43,3 +43,37 @@ class StudentFilter(django_filters.FilterSet):
             Q(student_id__icontains=value)
         )
     
+
+class StudentGroupFilter(django_filters.FilterSet):
+    student_status = django_filters.CharFilter(method="filter_by_student_status")
+
+    class Meta:
+        model = models.Student
+        fields = [
+            'student_status',
+        ]
+
+    def filter_by_student_status(self, queryset, name, value):
+        if value == "debt":
+            print("debt")
+            return queryset.filter(
+                is_debt=True,
+            )
+        elif value == "paid":
+            return queryset.filter(
+                is_debt=False,
+            ).distinct()
+        elif value == "study":
+            return queryset.filter(
+                type='study'
+            )
+        elif value == "graduate":
+            return queryset.filter(
+                type="graduate"
+            )
+        elif value == "blacklist":
+            return queryset.filter(
+                is_blacklist=True
+            )
+        else:
+            return queryset

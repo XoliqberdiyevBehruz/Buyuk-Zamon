@@ -102,3 +102,56 @@ class StudentSendMessageApiView(generics.GenericAPIView):
                 tasks.send_telegram_message.delay(settings.BOT_TOKEN, id, serializer.data.get('message'))
             return Response({"message": "send"}, status=status.HTTP_200_OK)
         return Response(serializer.error_messages, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class GroupCreateApiView(generics.GenericAPIView):
+    serializer_class = serializers.GroupCreateSerializer
+    queryset = models.StudentGroup.objects.all()
+    permission_classes = [permissions.IsBossOrEmployee]
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response({"message": "group created"}, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class FilterStudentForAddGroupApiView(views.APIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+
+    def get(self, request):
+        start_date = self.request.query_params.get('start_date')
+        end_date = self.request.query_params.get('end_date')
+        student_type = self.request.query_params.get('type', 'new')
+        if not start_date or not end_date:
+            return Response({"message": "start_date and end_date query is required"}, status=400)
+        
+        queryset = models.Student.objects.filter(
+            student_id_time__range=(start_date, end_date), type=student_type
+        )
+        serializer = serializers.GroupAddStudentListSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+    
+
+class GroupDetailApiView(generics.GenericAPIView):
+    # permission_classes = [permissions.IsBossOrEmployee]
+    serializer_class = serializers.GroupStudentListSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = filters.StudentGroupFilter
+
+    def get(self, request, id):
+        try:
+            group = models.StudentGroup.objects.get(id=id)
+            students = group.students
+            serializer = self.serializer_class(self.filter_queryset(students), many=True)
+            return Response(serializer.data, status=200)
+        except models.StudentGroup.DoesNotExist:
+            return Response({"message": 'group not found'}, status=404)
+
+
+class GroupListApiView(generics.ListAPIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+    queryset = models.StudentGroup.objects.all()
+    serializer_class = serializers.GroupListSerializer
+    

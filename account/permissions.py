@@ -21,7 +21,8 @@ class IsBoss(BasePermission):
 
 class IsBossOrEmployee(BasePermission):
     def has_permission(self, request, view):
-        if request.user.role == 'boss' or request.user.role == 'employee':
-            return True
+        if request.user.is_authenticated:
+            if request.user.role == 'boss' or request.user.role == 'employee':
+                return True
         else:
             return False

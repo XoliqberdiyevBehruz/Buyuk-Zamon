@@ -32,6 +32,11 @@ class Student(BaseModel):
         ('noyabr', 'noyabr'),
         ('dekabr', 'dekabr')
     )
+    STUDENT_TYPE = (
+        ('new', 'new'),
+        ('study', 'study'),
+        ('graduate', 'graduate'),
+    )
 
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True)
@@ -46,8 +51,9 @@ class Student(BaseModel):
     
     tariff = models.CharField(max_length=50, choices=TARIFF)
     status = models.CharField(max_length=25, choices=STUDENT_STATUS)
+    type = models.CharField(max_length=20, choices=STUDENT_TYPE, default='new')
     
-    telegram_link = models.CharField(max_length=200, null=True, blank=True)
+    is_blacklist = models.BooleanField(default=False)
     group_joined = models.BooleanField(default=False)
     suprice = models.BooleanField(default=False)
     month = models.CharField(choices=MONTH, max_length=50, default='aprel')
@@ -128,4 +134,16 @@ class Notification(BaseModel):
 
     def __str__(self):
         return self.full_name or self.description
+
+
+class StudentGroup(BaseModel):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    group_name = models.CharField(max_length=250)
+    start_date_online = models.DateField()
+    start_date_offline = models.DateField()
+    students = models.ManyToManyField(Student, related_name="groups")
+
+    def __str__(self):
+        return self.group_name
     
