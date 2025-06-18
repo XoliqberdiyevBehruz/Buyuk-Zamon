@@ -204,3 +204,13 @@ class StudentSetTelegramGroupApiView(generics.GenericAPIView):
             serializer.save()
             return Response({"message": "add"}, status=200)
         return Response(serializer.errors, status=400)
+
+
+class StudentSelfGroupInfoApiView(views.APIView):
+    def get(self, request, id):
+        student = get_object_or_404(models.Student, id=id)
+        group = models.StudentGroup.objects.filter(students=student).order_by('created_at').last()
+        return Response({
+            "start_date": group.start_date,
+            'name': group.group_name
+        })
