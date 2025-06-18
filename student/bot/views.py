@@ -109,7 +109,8 @@ class VerifyStudentApiView(views.APIView):
                 return Response(
                     {
                         'id': student.id,
-                        'status': student.status
+                        'status': student.status,
+                        'type': student.type,
                     }
                 )
             else:
