@@ -10,9 +10,11 @@ urlpatterns = [
     path('student/course_statistic/', views.StudentsStatisticsApiView.as_view()),
     path('notification/list/', views.NotificationListApiView.as_view()),
     path('student/send/message/', views.StudentSendMessageApiView.as_view()),
+    path('student/<int:id>/telegram_group/list/', views.StudentTelegramGroupListSerializer.as_view()),
 
     path('group/create/', views.GroupCreateApiView.as_view()),
     path('group/filter_students/', views.FilterStudentForAddGroupApiView.as_view()),
     path('group/<int:id>/', views.GroupDetailApiView.as_view()),
     path('group/list/', views.GroupListApiView.as_view()),
+
 ]

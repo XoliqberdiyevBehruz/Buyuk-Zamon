@@ -1,4 +1,5 @@
 from django.db.models import Sum
+from django.shortcuts import get_object_or_404
 
 from rest_framework import generics, status, parsers, views
 from rest_framework.response import Response
@@ -135,7 +136,7 @@ class FilterStudentForAddGroupApiView(views.APIView):
     
 
 class GroupDetailApiView(generics.GenericAPIView):
-    # permission_classes = [permissions.IsBossOrEmployee]
+    permission_classes = [permissions.IsBossOrEmployee]
     serializer_class = serializers.GroupStudentListSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = filters.StudentGroupFilter
@@ -155,3 +156,12 @@ class GroupListApiView(generics.ListAPIView):
     queryset = models.StudentGroup.objects.all()
     serializer_class = serializers.GroupListSerializer
     
+
+class StudentTelegramGroupListSerializer(views.APIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+
+    def get(self, request, id):
+        student = get_object_or_404(models.Student, id=id)
+        telegram_groups = models.TelegramGroup.objects.filter(students=student)
+        serializer = serializers.StudentTelegramGroupsSerializer(telegram_groups, many=True)
+        return Response(serializer.data, status=200)
