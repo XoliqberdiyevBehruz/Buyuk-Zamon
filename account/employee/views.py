@@ -9,13 +9,13 @@ from account import models, permissions
 
 class EmployeeCreateView(generics.CreateAPIView):
     serializer_class = serializers.EmployeeCreateSerializer
-    permission_classes = [permissions.IsBoss]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Employee.objects.all()    
 
 
 class EmployeeListView(generics.ListAPIView):
     serializer_class = serializers.EmployeeListSerializer
-    permission_classes = [permissions.IsBoss]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Employee.objects.all()
     pagination_class = pagination.CustomPagination
     filter_backends = [DjangoFilterBackend]
@@ -24,39 +24,39 @@ class EmployeeListView(generics.ListAPIView):
 
 class EmployeeDetailView(generics.RetrieveDestroyAPIView):
     serializer_class = serializers.EmployeeDetailSerializer
-    permission_classes = [permissions.IsBoss]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Employee.objects.all()
     lookup_field = 'id'
 
 
 class EmployeeUpdateView(generics.UpdateAPIView):
     serializer_class = serializers.EmployeeUpdateSerializer
-    permission_classes = [permissions.IsBoss]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Employee.objects.all()
     lookup_field = 'id'
 
 
 class PositionListApiView(generics.ListAPIView):
     serializer_class = serializers.PositionSerializer
-    permission_classes = [permissions.IsBoss]
+    permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Position.objects.all()
 
 
 class EmployeeDashboardApiView(generics.ListAPIView):
     serializer_class = serializers.EmployeeDashboardSerializer
-    permission_classes =  [permissions.IsBoss]
+    permission_classes =  [permissions.IsBossOrEmployee]
     queryset = models.Employee.objects.all()
 
 
 class EmployeeSalarCreateyApiView(generics.CreateAPIView):
     serializer_class = serializers.EmployeeSalaryCreateSerializer
-    permission_classes = (permissions.IsBoss,)
+    permission_classes = (permissions.IsBossOrEmployee,)
     queryset = models.EmployeeSalary.objects.all()
 
 
 class EmployeeSalaryListApiView(generics.GenericAPIView):
     serializer_class = serializers.EmployeeSalarySerializer
-    permission_classes = (permissions.IsBoss,)
+    permission_classes = (permissions.IsBossOrEmployee,)
     queryset = models.EmployeeSalary.objects.order_by('-date')
 
     def get(self, request, employee_id):
