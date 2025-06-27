@@ -1,14 +1,39 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as Admin 
-from django.contrib.auth.models import Group
+from django.utils.translation import gettext_lazy as _
 
 from account import models 
 
 @admin.register(models.User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(Admin):
     list_display = ('id','full_name', 'phone_number', 'is_staff')
     list_filter = ('is_staff', 'is_active')
     ordering = ('id',)
+
+    fieldsets = (
+        (None, {"fields": ("phone_number", "password")}),
+        (_("Personal info"), {"fields": ("full_name", "email", 'role')}),
+        (
+            _("Permissions"),
+            {
+                "fields": (
+                    "is_active",
+                    "is_staff",
+                    "is_superuser",
+                ),
+            },
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
+    )
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": ("phone_number", "password1", "password2"),
+            },
+        ),
+    )
 
 @admin.register(models.Employee)
 class EmployeeAdmin(admin.ModelAdmin):

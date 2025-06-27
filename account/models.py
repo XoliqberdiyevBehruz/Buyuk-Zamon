@@ -22,6 +22,7 @@ class User(BaseModel, AbstractUser):
     ROLE = (
         ('boss', 'boss'),
         ('employee', 'employee'),
+        ('service', 'service')
     )
 
     full_name = models.CharField(max_length=255)
