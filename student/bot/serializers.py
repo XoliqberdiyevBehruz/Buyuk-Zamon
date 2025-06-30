@@ -122,3 +122,11 @@ class StudentSetTelegramGroupSerializer(serializers.Serializer):
         instance.students.set([validated_data.get('student')])
         instance.save()
         return instance
+
+
+class StudentGroupListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.StudentGroup
+        fields = [
+            'id', 'group_name'
+        ]

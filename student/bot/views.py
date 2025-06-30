@@ -214,3 +214,9 @@ class StudentSelfGroupInfoApiView(views.APIView):
             "start_date": group.start_date,
             'name': group.group_name
         })
+
+class StudentGroupListApiView(views.APIView):
+    def get(self, request):
+        groups = models.StudentGroup.objects.all()
+        serializer = serializers.StudentGroupListSerializer(groups, many=True)
+        return Response(serializer.data)
