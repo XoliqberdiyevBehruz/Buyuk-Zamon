@@ -220,3 +220,12 @@ class StudentGroupListApiView(views.APIView):
         groups = models.StudentGroup.objects.all()
         serializer = serializers.StudentGroupListSerializer(groups, many=True)
         return Response(serializer.data)
+
+
+class GetUserByTelegramIdApiView(views.APIView):
+    def get(self, request, tg_id):
+        student = get_object_or_404(models.Student, telegram_id=tg_id)
+        return Response({
+            "id": student.id,
+            "telegram_id": student.telegram_id
+        })

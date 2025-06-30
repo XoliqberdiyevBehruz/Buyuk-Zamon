@@ -14,4 +14,5 @@ urlpatterns = [
     re_path(r"^bot/set_telegram_group/(?P<id>-?\d+)/$", views.StudentSetTelegramGroupApiView.as_view()),
     path('bot/student_group_info/<int:id>/', views.StudentSelfGroupInfoApiView.as_view()),
     path('bot/student_group/list/', views.StudentGroupListApiView.as_view()),
+    path('bot/student/get_by_tg_id/<int:tg_id>/', views.StudentGetByIdApiView.as_view()),
 ]
