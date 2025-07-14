@@ -229,3 +229,9 @@ class GetUserByTelegramIdApiView(views.APIView):
             "id": student.id,
             "telegram_id": student.telegram_id
         })
+    
+
+class StudentMessageCreateApiView(generics.CreateAPIView):
+    serializer_class = serializers.StudentMessageCreateSerializer
+    queryset = models.StudentMessage.objects.all()
+    

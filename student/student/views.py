@@ -165,3 +165,4 @@ class StudentTelegramGroupListSerializer(views.APIView):
         telegram_groups = models.TelegramGroup.objects.filter(students=student)
         serializer = serializers.StudentTelegramGroupsSerializer(telegram_groups, many=True)
         return Response(serializer.data, status=200)
+    

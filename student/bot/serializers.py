@@ -130,3 +130,24 @@ class StudentGroupListSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'group_name'
         ]
+
+
+class StudentMessageCreateSerializer(serializers.Serializer):
+    message = serializers.CharField()
+    telegram_id = serializers.CharField()
+
+    def validate(self, data):
+        try:
+            student = models.Student.objects.get(telegram_id=data.get('telegram_id'))
+        except models.Student.DoesNotExist:
+            raise serializers.ValidationError({'detail': "Student not found"})
+        data['student'] = student
+        return data
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            message = models.StudentMessage.objects.create(
+                message=validated_data.get('message'),
+                student=validated_data.get('student')
+            )
+            return message

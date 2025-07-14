@@ -10,7 +10,6 @@ class TelegramGroup(BaseModel):
     name = models.CharField(max_length=250)
     group_id = models.BigIntegerField(unique=True)
     students = models.ManyToManyField('Student', related_name='telegram_groups')
-
     
     def __str__(self):
         return f"{self.name} ---- {self.group_id}"
@@ -154,4 +153,12 @@ class StudentGroup(BaseModel):
 
     def __str__(self):
         return self.group_name
+    
+
+class StudentMessage(BaseModel):
+    message = models.CharField(max_length=500)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, related_name='messages')
+
+    def __str__(self):
+        return f'{self.student} - {self.message}'
     
