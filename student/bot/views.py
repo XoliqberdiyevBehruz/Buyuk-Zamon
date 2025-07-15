@@ -231,7 +231,13 @@ class GetUserByTelegramIdApiView(views.APIView):
         })
     
 
-class StudentMessageCreateApiView(generics.CreateAPIView):
+class StudentMessageCreateApiView(generics.GenericAPIView):
     serializer_class = serializers.StudentMessageCreateSerializer
     queryset = models.StudentMessage.objects.all()
     
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'success': True}, status=200)
+        return Response(serializer.errors, status=400)
