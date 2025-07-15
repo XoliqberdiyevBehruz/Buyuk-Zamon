@@ -178,7 +178,7 @@ cython_debug/
 ### Python ###
 # Byte-compiled / optimized / DLL files
 
-# C extensions
+# C extensionsc
 
 # Distribution / packaging
 
