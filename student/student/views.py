@@ -18,7 +18,7 @@ class StudentListApiView(generics.ListAPIView):
     serializer_class = serializers.StudentListSerializer
     permission_classes = [permissions.IsBossOrEmployee]
     filter_backends = [DjangoFilterBackend]
-    filterset_class = filters.StudentFilter
+    filterset_class = filters.StudentFilter 
 
 
 class StudentAddApiView(generics.CreateAPIView):
@@ -166,3 +166,11 @@ class StudentTelegramGroupListSerializer(views.APIView):
         serializer = serializers.StudentTelegramGroupsSerializer(telegram_groups, many=True)
         return Response(serializer.data, status=200)
     
+
+class OnlineStudentListApiView(views.APIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+
+    def get(self, request):
+        students = models.Student.objects.filter(study_type='online').select_related('employee')
+        serializer = serializers.StudentListSerializer(students, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

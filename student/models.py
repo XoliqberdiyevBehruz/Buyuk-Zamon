@@ -1,4 +1,7 @@
+from datetime import datetime, time
+
 from django.db import models
+from django.utils.timezone import make_aware
 
 from account.models import BaseModel 
 
@@ -46,6 +49,10 @@ class Student(BaseModel):
         ('study', 'study'),
         ('graduate', 'graduate'),
     )
+    STUDY_TYPE = (
+        ('offline', 'offline'),
+        ('online', 'online'),
+    )
 
     full_name = models.CharField(max_length=250, null=True, blank=True)
     phone_number = models.CharField(max_length=15, unique=True)
@@ -61,7 +68,8 @@ class Student(BaseModel):
     tariff = models.CharField(max_length=50, choices=TARIFF)
     status = models.CharField(max_length=25, choices=STUDENT_STATUS)
     type = models.CharField(max_length=20, choices=STUDENT_TYPE, default='new')
-    
+    study_type = models.CharField(max_length=10, choices=STUDY_TYPE, default='offline')
+
     is_blacklist = models.BooleanField(default=False)
     group_joined = models.BooleanField(default=False)
     suprice = models.BooleanField(default=False)
@@ -75,7 +83,6 @@ class Student(BaseModel):
 
     def __str__(self):
         return self.full_name
-
 
     def save(self, *args, **kwargs):
         if self.paid < 3_000_000:
@@ -153,6 +160,16 @@ class StudentGroup(BaseModel):
 
     def __str__(self):
         return self.group_name
+    
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        if is_new:
+            start_datetime = make_aware(datetime.combine(self.start_date, time.min))
+            end_datetime = make_aware(datetime.combine(self.end_date, time.max))
+            students_to_add = Student.objects.filter(student_id_time__range=(start_datetime, end_datetime))
+            self.students.add(*students_to_add)
     
 
 class StudentMessage(BaseModel):

@@ -16,5 +16,6 @@ urlpatterns = [
     path('group/filter_students/', views.FilterStudentForAddGroupApiView.as_view()),
     path('group/<int:id>/', views.GroupDetailApiView.as_view()),
     path('group/list/', views.GroupListApiView.as_view()),
+    path('online/student/list/', views.OnlineStudentListApiView.as_view()),
 
 ]

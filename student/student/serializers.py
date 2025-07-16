@@ -85,7 +85,6 @@ class GroupCreateSerializer(serializers.Serializer):
     end_date = serializers.DateField()
     start_date_online = serializers.DateField()
     start_date_offline = serializers.DateField()
-    students_ids = serializers.ListSerializer(child=serializers.IntegerField())
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -96,7 +95,6 @@ class GroupCreateSerializer(serializers.Serializer):
                 start_date_online=validated_data.get('start_date_online'),
                 start_date_offline=validated_data.get("start_date_offline"),
             )
-            group.students.set(validated_data.pop('students_ids', []))
             return group
         
     
