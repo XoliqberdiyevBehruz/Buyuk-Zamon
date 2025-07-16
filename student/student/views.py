@@ -176,3 +176,9 @@ class OnlineStudentListApiView(generics.ListAPIView):
         students = models.Student.objects.filter(study_type='online').select_related('employee')
         serializer = serializers.StudentListSerializer(students, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class StudentMessageListApiView(generics.ListAPIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+    queryset = models.StudentMessage.objects.select_related('student')
+    serializer_class = serializers.StudentMessageListSerializer

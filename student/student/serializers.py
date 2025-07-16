@@ -131,3 +131,11 @@ class StudentTelegramGroupsSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'name'
         ]
+
+
+class StudentMessageListSerializer(serializers.ModelSerializer):
+    student = StudentListSerializer()
+    
+    class Meta:
+        model = models.StudentMessage
+        fields = ['id', 'message', 'student']
