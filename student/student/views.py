@@ -167,8 +167,10 @@ class StudentTelegramGroupListSerializer(views.APIView):
         return Response(serializer.data, status=200)
     
 
-class OnlineStudentListApiView(views.APIView):
+class OnlineStudentListApiView(generics.ListAPIView):
     permission_classes = [permissions.IsBossOrEmployee]
+    queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentListSerializer
 
     def get(self, request):
         students = models.Student.objects.filter(study_type='online').select_related('employee')
