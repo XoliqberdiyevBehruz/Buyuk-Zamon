@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'buyuk_zamon_crm',
+        'NAME': 'test_db',
         'USER': 'postgres',
         'PASSWORD': '20090912',
         'HOST': 'localhost',

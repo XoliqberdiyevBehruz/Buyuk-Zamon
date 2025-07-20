@@ -241,3 +241,12 @@ class StudentMessageCreateApiView(generics.GenericAPIView):
             serializer.save()
             return Response({'success': True}, status=200)
         return Response(serializer.errors, status=400)
+    
+
+class StudentChangeStudyStatusApiView(views.APIView):
+    def post(self, request, telegram_id):
+        student = get_object_or_404(models.Student, telegram_id=telegram_id)
+        student.study_type = "online"
+        student.save()
+        return Response({"success": True, "message": "student study online"}, status=200)
+    

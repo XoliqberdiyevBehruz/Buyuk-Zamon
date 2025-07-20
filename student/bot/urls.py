@@ -16,4 +16,5 @@ urlpatterns = [
     path('bot/student_group/list/', views.StudentGroupListApiView.as_view()),
     path('bot/student/get_by_tg_id/<int:tg_id>/', views.GetUserByTelegramIdApiView.as_view()),
     path('bot/message/create/', views.StudentMessageCreateApiView.as_view()),
+    path('bot/change_student_study_type/<int:telegram_id>', views.StudentChangeStudyStatusApiView.as_view()),
 ]
