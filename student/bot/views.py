@@ -227,7 +227,8 @@ class GetUserByTelegramIdApiView(views.APIView):
         student = get_object_or_404(models.Student, telegram_id=tg_id)
         return Response({
             "id": student.id,
-            "telegram_id": student.telegram_id
+            "telegram_id": student.telegram_id,
+            "status": student.statusc
         })
     
 
