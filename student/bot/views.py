@@ -228,7 +228,7 @@ class GetUserByTelegramIdApiView(views.APIView):
         return Response({
             "id": student.id,
             "telegram_id": student.telegram_id,
-            "status": student.statusc
+            "status": student.status
         })
     
 
