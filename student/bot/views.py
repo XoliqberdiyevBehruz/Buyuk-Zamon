@@ -230,7 +230,7 @@ class GetUserByTelegramIdApiView(views.APIView):
             "telegram_id": student.telegram_id,
             "status": student.status,
             "type": student.type,
-            'group': models.StudentGroup.objects.filter(students=student).first().name
+            'group': models.StudentGroup.objects.filter(students=student).first().group_name
         })
     
 
