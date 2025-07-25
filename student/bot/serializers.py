@@ -94,7 +94,7 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
 class TelegramGroupCreateSerializer(serializers.Serializer):
     name = serializers.CharField()
     group_id = serializers.IntegerField()
-    student_group = serializers.CharField()
+    type = serializers.CharField()
 
     def create(self, validated_data):
         with transaction.atomic():

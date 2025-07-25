@@ -13,7 +13,7 @@ class TelegramGroup(BaseModel):
     name = models.CharField(max_length=250)
     group_id = models.BigIntegerField(unique=True)
     students = models.ManyToManyField('Student', related_name='telegram_groups')
-    student_group = models.CharField(max_length=200, null=True, blank=True)
+    type = models.CharField(max_length=200, null=True, blank=True)
     
     def __str__(self):
         return f"{self.name} ---- {self.group_id}"

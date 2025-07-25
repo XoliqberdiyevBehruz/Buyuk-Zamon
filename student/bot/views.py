@@ -251,4 +251,14 @@ class StudentChangeStudyStatusApiView(views.APIView):
         student.study_type = "online"
         student.save()
         return Response({"success": True, "message": "student study online"}, status=200)
-    
+
+
+class GetTelegramChannelByTypeApiView(views.APIView):
+    def get(self, request, type):
+        telegram_group = get_object_or_404(models.TelegramGroup, type=type)
+        return Response(
+            {
+                'id': telegram_group.group_id
+            },
+            status=status.HTTP_200_OK
+        )
