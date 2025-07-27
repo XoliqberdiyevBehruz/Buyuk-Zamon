@@ -90,3 +90,9 @@ class StudentsStatisticsApiView(views.APIView):
                 'paid_students_count': paid_students_count,
             }
         )
+    
+
+class StudentServiceAddApiView(generics.CreateAPIView):
+    serializer_class = student_serializer.StudentServiceAddSerializer
+    queryset = models.Student.objects.all()
+    permission_classes = [permissions.IsBossOrEmployee]

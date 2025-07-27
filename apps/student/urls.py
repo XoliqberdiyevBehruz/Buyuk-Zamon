@@ -14,6 +14,11 @@ urlpatterns = [
             path('<int:id>/update/', student.StudentUpdateApiView.as_view()),
             path('<int:id>/', student.StudentDetailApiView.as_view()),
             path('student/course_statistic/', student.StudentsStatisticsApiView.as_view()),
+            path('service/', include(
+                [
+                    path('add/', student.StudentServiceAddApiView.as_view()),
+                ]
+            ))
         ]
     )),
 

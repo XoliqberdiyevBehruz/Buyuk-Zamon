@@ -95,3 +95,34 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
         group.students.add(instance)
         group.save()
         return instance
+    
+
+class StudentServiceAddSerializer(serializers.Serializer):
+    full_name = serializers.CharField()
+    phone_number = serializers.CharField()
+    contract_number = serializers.CharField()
+    tariff = serializers.ChoiceField(choices=models.Student.TARIFF)
+    employee_id = serializers.IntegerField()
+    coach_id = serializers.IntegerField()
+
+    def validate(self, data):
+        employee = Employee.objects.filter(id=data['employee_id']).first()
+        coach = Employee.objects.filter(id=data['coach_id']).first()
+        if not employee:
+            raise serializers.ValidationError("Employee not found")
+        if not coach:
+            raise serializers.ValidationError("Coach not found")
+        data['employee'] = employee
+        data['coach'] = coach
+        return data
+    
+    def create(self, validated_data):
+        with transaction.atomic():
+            return models.Student.objects.create(
+                full_name=validated_data.get('full_name'),
+                phone_number=validated_data.get('phone_number'),
+                contract_number=validated_data.get('contract_number'),
+                tariff=validated_data.get('tariff'),
+                employee=validated_data.get('employee'),
+                coach=validated_data.get('coach'),
+            )

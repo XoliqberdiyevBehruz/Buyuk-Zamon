@@ -61,7 +61,7 @@ class Student(BaseModel):
     student_id = models.PositiveBigIntegerField(null=True, blank=True)
 
     contract_number = models.CharField(max_length=250, null=True, blank=True)
-    course_price = models.PositiveBigIntegerField()
+    course_price = models.PositiveBigIntegerField(default=0)
     paid = models.IntegerField(null=True, blank=True)
     debt = models.IntegerField(null=True, blank=True)
     is_debt = models.BooleanField(default=True)
@@ -76,7 +76,12 @@ class Student(BaseModel):
     suprice = models.BooleanField(default=False)
     month = models.CharField(choices=MONTH, max_length=50, default='aprel')
 
-    employee = models.ForeignKey('account.Employee', on_delete=models.SET_NULL, null=True,related_name='students')
+    employee = models.ForeignKey(
+        'account.Employee', on_delete=models.SET_NULL, null=True,related_name='students'
+    )
+    coach = models.ForeignKey(
+        'account.Employee', on_delete=models.CASCADE, null=True, related_name='coach_students'
+    )
 
     telegram_id = models.CharField(max_length=250, null=True, blank=True)
     telegram_full_name = models.CharField(max_length=250, null=True, blank=True)
@@ -86,15 +91,16 @@ class Student(BaseModel):
         return self.full_name
 
     def save(self, *args, **kwargs):
-        if self.paid < 3_000_000:
-            self.status = 'prepayment'
-            self.is_debt = True
-        elif self.paid > 3_000_000 and self.paid < self.course_price:
-            self.status = 'partially'
-            self.is_debt = True
-        elif self.paid >= self.course_price:
-            self.status = 'completed'
-            self.is_debt = False
+        if self.paid:
+            if self.paid < 3_000_000:
+                self.status = 'prepayment'
+                self.is_debt = True
+            elif self.paid > 3_000_000 and self.paid < self.course_price:
+                self.status = 'partially'
+                self.is_debt = True
+            elif self.paid >= self.course_price:
+                self.status = 'completed'
+                self.is_debt = False
         return super().save(*args, **kwargs)
 
 
