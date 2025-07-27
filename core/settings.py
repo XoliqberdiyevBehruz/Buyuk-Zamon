@@ -37,9 +37,9 @@ INSTALLED_APPS = [
     'django_filters',
     'corsheaders',
 
-    'account',
-    'student',
-    'finance',
+    'apps.account',
+    'apps.student',
+    'apps.finance',
 ]
 
 MIDDLEWARE = [
@@ -143,7 +143,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'account.employee.pagination.CustomPagination',
+    'DEFAULT_PAGINATION_CLASS': 'apps.account.employee.pagination.CustomPagination',
     'PAGE_SIZE': 10
 }
 
