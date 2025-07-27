@@ -55,7 +55,6 @@ class StudentGroupFilter(django_filters.FilterSet):
 
     def filter_by_student_status(self, queryset, name, value):
         if value == "debt":
-            print("debt")
             return queryset.filter(
                 is_debt=True,
             )

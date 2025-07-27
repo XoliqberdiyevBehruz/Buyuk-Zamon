@@ -27,7 +27,7 @@ urlpatterns = [
    path('api/v1/auth/', include('apps.account.urls')),
    path('api/v1/accounts/', include('apps.account.employee.urls')),
    path('api/v1/bot/', include('apps.student.bot.urls')),
-   path('api/v1/students/', include('apps.student.student.urls')),
+   path('api/v1/students/', include('apps.student.urls')),
    path('api/v1/payments/', include('apps.student.payment.urls')),
    path('api/v1/expences/', include('apps.finance.expence.urls')),
    path('api/v1/incomes/', include('apps.finance.income.urls')),

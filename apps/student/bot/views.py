@@ -167,7 +167,7 @@ class StudentGetByIdApiView(views.APIView):
     
 
 class UpdateStudentApiView(generics.UpdateAPIView):
-    serializer_class = serializers.StudentUpdateSerializer
+    serializer_class = serializers.BotStudentUpdateSerializer
     lookup_field = 'id'
     queryset = models.Student.objects.all()
     

@@ -76,7 +76,7 @@ class StudentDescriptionSerializer(serializers.Serializer):
         return None
 
 
-class StudentUpdateSerializer(serializers.ModelSerializer):
+class BotStudentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
