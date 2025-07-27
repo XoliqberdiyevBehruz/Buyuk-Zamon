@@ -10,7 +10,7 @@ from apps.account import models, permissions
 class EmployeeCreateView(generics.CreateAPIView):
     serializer_class = serializers.EmployeeCreateSerializer
     permission_classes = [permissions.IsBossOrEmployee]
-    queryset = models.Employee.objects.all()    
+    queryset = models.Employee.objects.order_by('-created_at')    
 
 
 class EmployeeListView(generics.ListAPIView):

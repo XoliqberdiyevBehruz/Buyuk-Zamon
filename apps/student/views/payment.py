@@ -3,29 +3,29 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 
 from apps.student import models 
-from apps.student.payment import serializers
+from apps.student.serializers import payment as payment_serializer
 from apps.account import permissions
 
 
 class PaymentAddApiView(generics.CreateAPIView):
-    serializer_class = serializers.PaymentAddSerializer
+    serializer_class = payment_serializer.PaymentAddSerializer
     permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.Payment.objects.all()
 
 
 class PaymentListApiView(generics.GenericAPIView):
-    serializer_class = serializers.PaymentListSerializer
+    serializer_class = payment_serializer.PaymentListSerializer
     permission_classes = [permissions.IsBossOrEmployee]
 
     def get(self, request, student_id):
         payments = models.Payment.objects.filter(user__id=student_id).order_by('-created_at')
-        serializer = serializers.PaymentListSerializer(data=payments, many=True)
+        serializer = payment_serializer.PaymentListSerializer(data=payments, many=True)
         serializer.is_valid()
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class PaymentUpdateApiView(generics.GenericAPIView):
-    serializer_class = serializers.PaymentUpdateSerializer
+    serializer_class = payment_serializer.PaymentUpdateSerializer
     permission_classes = [permissions.IsBossOrEmployee]
 
     def put(self, request, payment_id):
@@ -34,7 +34,7 @@ class PaymentUpdateApiView(generics.GenericAPIView):
         except models.Payment.DoesNotExist:
             return Response({'message': 'not found'}, status=status.HTTP_404_NOT_FOUND)
         if payment.type == 'naxt':
-            serializer = serializers.PaymentUpdateSerializer(instance=payment, data=request.data)
+            serializer = payment_serializer.PaymentUpdateSerializer(instance=payment, data=request.data)
             serializer.is_valid()
             serializer.save()
             return Response({"success": True}, status=status.HTTP_200_OK)
@@ -48,7 +48,7 @@ class PaymentDeleteApiView(generics.DestroyAPIView):
 
 
 class PaymentImagesCreateApiView(generics.CreateAPIView):
-    serializer_class = serializers.PaymentImagesCreateSerializer
+    serializer_class = payment_serializer.PaymentImagesCreateSerializer
     permission_classes = [permissions.IsBossOrEmployee]
     queryset = models.PaymentImage.objects.all()
     parser_classes = [parsers.FormParser, parsers.MultiPartParser]

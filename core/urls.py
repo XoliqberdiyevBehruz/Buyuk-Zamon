@@ -24,13 +24,17 @@ schema_view = get_schema_view(
 
 urlpatterns = [
    path('admin/', admin.site.urls),
-   path('api/v1/auth/', include('apps.account.urls')),
-   path('api/v1/accounts/', include('apps.account.employee.urls')),
-   path('api/v1/bot/', include('apps.student.bot.urls')),
-   path('api/v1/students/', include('apps.student.urls')),
-   path('api/v1/payments/', include('apps.student.payment.urls')),
-   path('api/v1/expences/', include('apps.finance.expence.urls')),
-   path('api/v1/incomes/', include('apps.finance.income.urls')),
+   
+   path('api/v1/', include(
+       [
+         path('auth/', include('apps.account.urls')),
+         path('incomes/', include('apps.finance.income.urls')),
+         path('expences/', include('apps.finance.expence.urls')),
+         path('students/', include('apps.student.urls')),
+         path('accounts/', include('apps.account.employee.urls')),
+         path('bot/', include('apps.student.bot.urls')),
+       ]
+   )),
 
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 ]

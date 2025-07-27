@@ -1,7 +1,9 @@
 from django.urls import path, include
 
-from apps.student.views import student, student_group, student_message, telegram_group, notification
-
+from apps.student.views import (
+    student, student_group, student_message, telegram_group, notification,
+    payment
+)
 
 urlpatterns = [
     # student views and serializer api
@@ -43,6 +45,17 @@ urlpatterns = [
             path('create/', student_group.GroupCreateApiView.as_view()),
             path('<int:id>/', student_group.GroupDetailApiView.as_view()),
             path('list/', student_group.GroupListApiView.as_view()),
+        ]
+    )),
+    
+    # payment 
+    path('payment/', include(
+        [
+            path('add/', payment.PaymentAddApiView.as_view(),),
+            path('student/<int:student_id>/payment/list/', payment.PaymentListApiView.as_view()),
+            path('<int:payment_id>/update/', payment.PaymentUpdateApiView.as_view()),
+            path('images/create/', payment.PaymentImagesCreateApiView.as_view()),
+            path('<int:id>/delete/', payment.PaymentDeleteApiView.as_view()),
         ]
     )),
 ]
