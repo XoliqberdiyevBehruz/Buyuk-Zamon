@@ -96,3 +96,14 @@ class StudentServiceAddApiView(generics.CreateAPIView):
     serializer_class = student_serializer.StudentServiceAddSerializer
     queryset = models.Student.objects.all()
     permission_classes = [permissions.IsBossOrEmployee]
+
+
+class OnlineStudentListApiView(generics.ListAPIView):
+    permission_classes = [permissions.IsBossOrEmployee]
+    queryset = models.Student.objects.all()
+    serializer_class = student_serializer.StudentListSerializer
+
+    def get(self, request, month):
+        students = models.Student.objects.filter(month=month, study_type='online')
+        serializer = self.serializer_class(students, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

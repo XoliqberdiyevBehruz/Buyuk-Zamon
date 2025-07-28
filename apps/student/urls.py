@@ -18,7 +18,8 @@ urlpatterns = [
                 [
                     path('add/', student.StudentServiceAddApiView.as_view()),
                 ]
-            ))
+            )),
+            path('online/<str:month>/', student.OnlineStudentListApiView.as_view()),
         ]
     )),
 
