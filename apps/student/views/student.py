@@ -1,6 +1,4 @@
 from django.db.models import Sum
-from django.shortcuts import get_object_or_404
-from django.conf import settings
 
 from rest_framework import generics, status, parsers, views
 from rest_framework.response import Response
@@ -9,7 +7,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.student.serializers import student as student_serializer
 from apps.student.filters import student as student_filter
-from apps.student import models, tasks
+from apps.student import models
 from apps.account import permissions
 
 

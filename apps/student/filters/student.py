@@ -11,12 +11,16 @@ class StudentFilter(django_filters.FilterSet):
     search = django_filters.CharFilter(method='filter_search')
     month = django_filters.CharFilter(field_name='month')
     status = django_filters.CharFilter(field_name='status')
+    year = django_filters.CharFilter(method='filter_year')
 
     class Meta:
         model = models.Student
         fields = [
-            'is_debt', 'a_to_z', 'search', 'month', 'status'
+            'is_debt', 'a_to_z', 'search', 'month', 'status', 'year'
         ]
+
+    def filter_year(self, queryset, name, value):
+        return queryset.filter(student_id_time__year=value)
 
     def filter_is_debt(self, queryset, name, value):
         if value == True:
