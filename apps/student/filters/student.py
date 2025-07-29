@@ -12,12 +12,20 @@ class StudentFilter(django_filters.FilterSet):
     month = django_filters.CharFilter(field_name='month')
     status = django_filters.CharFilter(field_name='status')
     year = django_filters.CharFilter(method='filter_year')
+    online = django_filters.BooleanFilter(method='filter_online_student')
 
     class Meta:
         model = models.Student
         fields = [
-            'is_debt', 'a_to_z', 'search', 'month', 'status', 'year'
+            'is_debt', 'a_to_z', 'search', 'month', 'status', 'year', 'online'
         ]
+
+    def filter_online_student(self, queryset, name, value):
+        if value == True:
+            return queryset.filter(study_type='online')
+        elif value == False:
+            return queryset.filter(study_type='offline')
+        return queryset
 
     def filter_year(self, queryset, name, value):
         return queryset.filter(student_id_time__year=value)

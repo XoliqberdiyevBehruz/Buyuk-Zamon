@@ -7,7 +7,6 @@ from apps.account.models import Employee
 from apps.account.employee.serializers import EmployeeListSerializer
 
 
-
 class StudentListSerializer(serializers.ModelSerializer):
     payment = serializers.SerializerMethodField(method_name='get_payment')
     employee = EmployeeListSerializer(read_only=True)
@@ -15,8 +14,7 @@ class StudentListSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt',   
-            'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number', 'suprice', 'telegram_id'
+            'id', 'student_id_time', 'full_name', 'phone_number', 'tariff', 'course_price', 'paid', 'debt', 'group_joined', 'status', 'payment', 'employee', 'student_id', 'contract_number', 'suprice', 'telegram_id'
         ]
 
     def get_payment(self, obj):
@@ -59,12 +57,20 @@ class StudentAddSerializer(serializers.ModelSerializer):
         
     
 class StudentDetailSerializer(serializers.ModelSerializer):
+    group = serializers.SerializerMethodField(method_name='get_student_group')
+
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice', 'telegram_id', 'telegram_full_name', 'telegram_username',
-            'type', 'is_blacklist'
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice', 'telegram_id', 'telegram_full_name', 'telegram_username', 'type', 'is_blacklist', 
         ]
+        
+    def get_student_group(self, obj):
+        group = models.StudentGroup.objects.filter(studnets=obj).last()
+        return {
+            'id': group.id,
+            'name': group.group_name
+        }
 
 
 class StudentUpdateSerializer(serializers.ModelSerializer):
