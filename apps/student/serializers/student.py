@@ -62,7 +62,7 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.Student
         fields = [
-            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice', 'telegram_id', 'telegram_full_name', 'telegram_username', 'type', 'is_blacklist', 
+            'id', 'full_name', 'phone_number', 'contract_number', 'course_price', 'paid', 'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id', 'student_id_time', 'month', 'suprice', 'telegram_id', 'telegram_full_name', 'telegram_username', 'type', 'is_blacklist', 'group'
         ]
         
     def get_student_group(self, obj):
