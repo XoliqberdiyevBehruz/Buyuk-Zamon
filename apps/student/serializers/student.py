@@ -66,7 +66,7 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         ]
         
     def get_student_group(self, obj):
-        group = models.StudentGroup.objects.filter(studnets=obj).last()
+        group = models.StudentGroup.objects.filter(students=obj).last()
         return {
             'id': group.id,
             'name': group.group_name
