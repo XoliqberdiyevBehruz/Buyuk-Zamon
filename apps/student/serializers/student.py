@@ -68,8 +68,8 @@ class StudentDetailSerializer(serializers.ModelSerializer):
     def get_student_group(self, obj):
         group = models.StudentGroup.objects.filter(students=obj).last()
         return {
-            'id': group.id,
-            'name': group.group_name
+            'id': group.id if group else None,
+            'name': group.group_name if group else None
         }
 
 
@@ -100,8 +100,8 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
         group = models.StudentGroup.objects.get(id=validated_data.get('group'))
         group.students.add(instance)
         group.save()
-        return instance
-    
+        return instance 
+
 
 class StudentServiceAddSerializer(serializers.Serializer):
     full_name = serializers.CharField()
