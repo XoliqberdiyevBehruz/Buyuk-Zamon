@@ -34,8 +34,14 @@ class GroupDetailApiView(generics.GenericAPIView):
     def get(self, request, id):
         try:
             group = models.StudentGroup.objects.get(id=id)
-            students = group.students
-            serializer = self.serializer_class(self.paginate_queryset(self.filter_queryset(students)), many=True)
+            students = group.students.all()
+            filtered_students = self.filter_queryset(students)
+            paginated_students = self.paginate_queryset(filtered_students)
+
+            if paginated_students is not None:
+                serializer = self.serializer_class(paginated_students, many=True)
+                return self.get_paginated_response(serializer.data)
+            serializer = self.serializer_class(filtered_students, many=True)
             return Response(serializer.data, status=200)
         except models.StudentGroup.DoesNotExist:
             return Response({"message": 'group not found'}, status=404)
