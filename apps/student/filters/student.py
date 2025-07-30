@@ -13,11 +13,12 @@ class StudentFilter(django_filters.FilterSet):
     status = django_filters.CharFilter(field_name='status')
     year = django_filters.CharFilter(method='filter_year')
     online = django_filters.BooleanFilter(method='filter_online_student')
+    student_status = django_filters.CharFilter(method="filter_by_student_status")
 
     class Meta:
         model = models.Student
         fields = [
-            'is_debt', 'a_to_z', 'search', 'month', 'status', 'year', 'online'
+            'is_debt', 'a_to_z', 'search', 'month', 'status', 'year', 'online', 'student_status'
         ]
 
     def filter_online_student(self, queryset, name, value):
@@ -55,16 +56,6 @@ class StudentFilter(django_filters.FilterSet):
             Q(student_id__icontains=value)
         )
     
-
-class StudentGroupFilter(django_filters.FilterSet):
-    student_status = django_filters.CharFilter(method="filter_by_student_status")
-
-    class Meta:
-        model = models.Student
-        fields = [
-            'student_status',
-        ]
-
     def filter_by_student_status(self, queryset, name, value):
         if value == "debt":
             return queryset.filter(
@@ -88,3 +79,4 @@ class StudentGroupFilter(django_filters.FilterSet):
             )
         else:
             return queryset
+    

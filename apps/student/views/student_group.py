@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
 
 from apps.student.serializers import student_group as student_group_serializer
-from apps.student.filters.student import StudentGroupFilter
+from apps.student.filters.student import StudentFilter
 from apps.student import models, tasks
 from apps.account import permissions
 
@@ -27,7 +27,7 @@ class GroupDetailApiView(generics.GenericAPIView):
     permission_classes = [permissions.IsBossOrEmployee]
     serializer_class = student_group_serializer.GroupStudentListSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_class = StudentGroupFilter
+    filterset_class = StudentFilter
 
     def get(self, request, id):
         try:
