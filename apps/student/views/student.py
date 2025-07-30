@@ -71,9 +71,10 @@ class StudentsStatisticsApiView(views.APIView):
         query_param = request.query_params.get('month')
         query_param_year = request.query_params.get('year')
         queryset = models.Student.objects.all()        
-        if query_param and query_param_year:
-            queryset = queryset.filter(month=query_param, student_id_time__year=query_param_year)
-            
+        if query_param:
+            queryset = queryset.filter(month=query_param)
+        if query_param_year:
+            queryset = queryset.filter(student_id_time__year=query_param_year)
         total_price = queryset.aggregate(total_price=Sum('course_price'))['total_price']
         total_paid_price = queryset.aggregate(total_paid_price=Sum('paid'))['total_paid_price']
         total_indebtedness_price = queryset.aggregate(total_indebtedness_price=Sum('debt'))['total_indebtedness_price']
