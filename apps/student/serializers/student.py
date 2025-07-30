@@ -100,6 +100,7 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
         group = models.StudentGroup.objects.get(id=validated_data.get('group'))
         group.students.add(instance)
         group.save()
+        instance.save()
         return instance 
 
 

@@ -7,6 +7,7 @@ from apps.student.serializers import student_group as student_group_serializer
 from apps.student.filters.student import StudentFilter
 from apps.student import models, tasks
 from apps.account import permissions
+from apps.account.employee.pagination import CustomPagination
 
  
 class GroupCreateApiView(generics.GenericAPIView):
@@ -28,12 +29,13 @@ class GroupDetailApiView(generics.GenericAPIView):
     serializer_class = student_group_serializer.GroupStudentListSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_class = StudentFilter
+    pagination_class = CustomPagination
 
     def get(self, request, id):
         try:
             group = models.StudentGroup.objects.get(id=id)
             students = group.students
-            serializer = self.serializer_class(self.filter_queryset(students), many=True)
+            serializer = self.serializer_class(self.paginate_queryset(self.filter_queryset(students)), many=True)
             return Response(serializer.data, status=200)
         except models.StudentGroup.DoesNotExist:
             return Response({"message": 'group not found'}, status=404)
