@@ -80,11 +80,6 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
             'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id',
             'student_id_time', 'month', 'type', 'is_blacklist', 'group'
         ]
-
-    def validate_group(self, value):
-        if not models.StudentGroup.objects.filter(id=value).exists():
-            raise serializers.ValidationError("Group not found")
-        return value
     
 
 class StudentServiceAddSerializer(serializers.Serializer):
