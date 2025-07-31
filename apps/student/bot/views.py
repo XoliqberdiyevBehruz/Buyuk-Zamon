@@ -209,10 +209,9 @@ class StudentSetTelegramGroupApiView(generics.GenericAPIView):
 class StudentSelfGroupInfoApiView(views.APIView):
     def get(self, request, id):
         student = get_object_or_404(models.Student, id=id)
-        group = models.StudentGroup.objects.filter(students=student).order_by('created_at').last()
         return Response({
-            "start_date": group.start_date,
-            'name': group.group_name
+            "start_date": student.group.start_date,
+            'name': student.group.group_name
         })
 
 class StudentGroupListApiView(views.APIView):
@@ -230,7 +229,7 @@ class GetUserByTelegramIdApiView(views.APIView):
             "telegram_id": student.telegram_id,
             "status": student.status,
             "type": student.type,
-            'group': models.StudentGroup.objects.filter(students=student).last().group_name
+            'group': student.group.group_name
         })
     
 
