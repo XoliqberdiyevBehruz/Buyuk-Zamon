@@ -27,10 +27,10 @@ class GroupCreateSerializer(serializers.Serializer):
             )
             start_datetime = validated_data.get('student_start_date')
             end_datetime = validated_data.get('student_end_date')
-            students_to_add = models.Student.objects.filter(
-                student_id_time__range=(start_datetime, end_datetime)
-            )
-            group.students.add(*students_to_add)
+            students = models.Student.objects.filter(student_id_time__range=(start_datetime, end_datetime))
+            for student in students:
+                student.group = group
+                student.save() 
             return group
         
     

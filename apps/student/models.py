@@ -19,6 +19,18 @@ class TelegramGroup(BaseModel):
         return f"{self.name} ---- {self.group_id}"
 
 
+
+class StudentGroup(BaseModel):
+    start_date = models.DateField()
+    end_date = models.DateField()
+    group_name = models.CharField(max_length=250)
+    start_date_online = models.DateField()
+    start_date_offline = models.DateField()
+
+    def __str__(self):
+        return self.group_name
+
+
 class Student(BaseModel):
     TARIFF = (
         (PREMIUM, PREMIUM),
@@ -81,6 +93,9 @@ class Student(BaseModel):
     )
     coach = models.ForeignKey(
         'account.Employee', on_delete=models.CASCADE, null=True, related_name='coach_students'
+    )
+    group = models.ForeignKey(
+        StudentGroup, on_delete=models.CASCADE, related_name='groups', null=True,
     )
 
     telegram_id = models.CharField(max_length=250, null=True, blank=True)
@@ -156,28 +171,6 @@ class Notification(BaseModel):
     def __str__(self):
         return self.full_name or self.description
 
-
-class StudentGroup(BaseModel):
-    start_date = models.DateField()
-    end_date = models.DateField()
-    group_name = models.CharField(max_length=250)
-    start_date_online = models.DateField()
-    start_date_offline = models.DateField()
-    students = models.ManyToManyField(Student, related_name="groups")
-
-    def __str__(self):
-        return self.group_name
-    
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-
-        if is_new:
-            start_datetime = make_aware(datetime.combine(self.start_date, time.min))
-            end_datetime = make_aware(datetime.combine(self.end_date, time.max))
-            students_to_add = Student.objects.filter(student_id_time__range=(start_datetime, end_datetime))
-            self.students.add(*students_to_add)
-    
 
 class StudentMessage(BaseModel):
     message = models.CharField(max_length=500)

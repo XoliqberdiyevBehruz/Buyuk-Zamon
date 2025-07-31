@@ -66,16 +66,13 @@ class StudentDetailSerializer(serializers.ModelSerializer):
         ]
         
     def get_student_group(self, obj):
-        group = models.StudentGroup.objects.filter(students=obj).last()
         return {
-            'id': group.id if group else None,
-            'name': group.group_name if group else None
+            'id': obj.group.id if obj.group else None,
+            'name': obj.group.group_name if obj.group else None
         }
 
 
 class StudentUpdateSerializer(serializers.ModelSerializer):
-    group = serializers.IntegerField(write_only=True)
-
     class Meta:
         model = models.Student
         fields = [
@@ -89,20 +86,6 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Group not found")
         return value
     
-    def update(self, instance, validated_data):
-        fields = [
-            'full_name', 'phone_number', 'contract_number', 'course_price', 'paid',
-            'group_joined', 'debt', 'tariff', 'employee', 'suprice', 'student_id',
-            'student_id_time', 'month', 'type', 'is_blacklist'
-        ]
-        for field in fields:
-            setattr(instance, field, validated_data.get(field, getattr(instance, field)))
-        group = models.StudentGroup.objects.get(id=validated_data.get('group'))
-        group.students.add(instance)
-        group.save()
-        instance.save()
-        return instance 
-
 
 class StudentServiceAddSerializer(serializers.Serializer):
     full_name = serializers.CharField()

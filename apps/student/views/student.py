@@ -49,7 +49,7 @@ class StudentUpdateApiView(generics.UpdateAPIView):
             if instance.debt <= 0:
                 instance.debt = 0
                 instance.is_debt = False
-
+        instance.save()
         serializer = self.serializer_class(instance, data=request.data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)

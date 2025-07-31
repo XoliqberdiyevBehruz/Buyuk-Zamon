@@ -34,7 +34,7 @@ class GroupDetailApiView(generics.GenericAPIView):
     def get(self, request, id):
         try:
             group = models.StudentGroup.objects.get(id=id)
-            students = group.students.all()
+            students = models.Student.objects.filter(group=group)
             filtered_students = self.filter_queryset(students)
             paginated_students = self.paginate_queryset(filtered_students)
 
