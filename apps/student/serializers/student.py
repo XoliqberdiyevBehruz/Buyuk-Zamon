@@ -94,6 +94,7 @@ class StudentServiceAddSerializer(serializers.Serializer):
     tariff = serializers.ChoiceField(choices=models.Student.TARIFF)
     employee_id = serializers.IntegerField()
     coach_id = serializers.IntegerField()
+    student_id = serializers.IntegerField()
 
     def validate(self, data):
         employee = Employee.objects.filter(id=data['employee_id']).first()
@@ -115,4 +116,5 @@ class StudentServiceAddSerializer(serializers.Serializer):
                 tariff=validated_data.get('tariff'),
                 employee=validated_data.get('employee'),
                 coach=validated_data.get('coach'),
+                student_id=validated_data.get('student_id')
             )
