@@ -13,8 +13,8 @@ class GroupCreateSerializer(serializers.Serializer):
     end_date = serializers.DateField()
     start_date_online = serializers.DateField()
     start_date_offline = serializers.DateField()
-    student_start_date = serializers.DateTimeField()
-    student_end_date = serializers.DateTimeField()
+    student_start_date = serializers.DateField()
+    student_end_date = serializers.DateField()
 
     def create(self, validated_data):
         with transaction.atomic():
@@ -24,10 +24,14 @@ class GroupCreateSerializer(serializers.Serializer):
                 end_date=validated_data.get('end_date'),
                 start_date_online=validated_data.get('start_date_online'),
                 start_date_offline=validated_data.get("start_date_offline"),
+                student_start_date=validated_data.get('student_start_date'),
+                student_end_date=validated_data.get('student_end_date'),
             )
             start_datetime = validated_data.get('student_start_date')
             end_datetime = validated_data.get('student_end_date')
-            students = models.Student.objects.filter(student_id_time__range=(start_datetime, end_datetime))
+            students = models.Student.objects.filter(
+                student_id_time__range=(start_datetime, end_datetime)
+            )
             for student in students:
                 student.group = group
                 student.save() 

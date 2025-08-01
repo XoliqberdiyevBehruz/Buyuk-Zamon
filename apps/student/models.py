@@ -26,6 +26,8 @@ class StudentGroup(BaseModel):
     group_name = models.CharField(max_length=250)
     start_date_online = models.DateField()
     start_date_offline = models.DateField()
+    student_start_date = models.DateField(null=True)
+    student_end_date = models.DateField(null=True)
 
     def __str__(self):
         return self.group_name
@@ -116,6 +118,12 @@ class Student(BaseModel):
             elif self.paid >= self.course_price:
                 self.status = 'completed'
                 self.is_debt = False
+        group = StudentGroup.objects.filter(
+            student_start_date__lte=self.student_id_time,
+            student_end_date__gte=self.student_id_time
+        ).first()
+        if group:
+            self.group = group
         return super().save(*args, **kwargs)
 
 
